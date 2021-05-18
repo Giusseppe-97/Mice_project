@@ -46,7 +46,7 @@ class Application(tk.Tk):
         super().__init__(*args, **kwargs)
         
         # Set style 
-        self.tk.call('source', 'azure.tcl')
+        self.tk.call('source', r'docs/style/azure.tcl')
         ttk.Style().theme_use('azure')
 
         # Create Main Frames
@@ -279,5 +279,5 @@ class Application(tk.Tk):
 app = Application()
 app.geometry("1900x990+0+0")
 app.resizable(True, False)
-app.iconbitmap(r'mickey.ico')
+app.iconbitmap(r'docs/mickey.ico')
 app.mainloop()

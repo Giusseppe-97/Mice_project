@@ -25,6 +25,7 @@ from matplotlib.backends.backend_tkagg import (
 
 # from Plotting_mice import MyPlot
 import matplotlib.pyplot as plt
+import XlsxWriter as xw
 from matplotlib.ticker import MaxNLocator
 import pandas as pd
 import numpy as np

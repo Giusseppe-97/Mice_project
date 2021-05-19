@@ -169,8 +169,8 @@ class Application(tk.Tk):
         """plot function is created for plotting the graph in tkinter window
         """
         # creating the Tkinter canvas containing the Matplotlib figure
-        fig = self.import_excel_file()
-        fig2, ax = self.import_excel_file_2()
+        fig = self.plot_individual_hist()
+        fig2, ax = self.plot_4_hist()
         # fig2, ax = MyPlot.my_fxn2()
 
         self.canvas2 = FigureCanvasTkAgg(fig, master=self.canvas2)
@@ -194,7 +194,7 @@ class Application(tk.Tk):
 
         if self.textbox1 == None:
             messagebox.showinfo("Warning Message", "Please select a valid Excel file path")
-            
+
     def import_excel_file(self):
         """plot simple plot
 
@@ -229,7 +229,7 @@ class Application(tk.Tk):
         total_data = [df_MWt, df_FWt, df_MHet, df_FHet]
     
         j=0 
-        d2 = []
+        self.d2 = []
         for element in total_data:
             age_in_weeks = 0
             d1 = []
@@ -238,26 +238,25 @@ class Application(tk.Tk):
                 d1.append(age_in_weeks)
             j = j + 1    
             d1.sort(reverse=True)
-            d2.append(d1)
-        print(d2)
-        d3 = [d2[0][0], d2[1][0], d2[2][0], d2[3][0]]
-        d4 = [d2[0], d2[1], d2[2], d2[3]]
+            self.d2.append(d1)
+        print(self.d2)
+        self.d3 = [self.d2[0][0], self.d2[1][0], self.d2[2][0], self.d2[3][0]]
         
-        b = int(max(d3))+1
-        i=0
-        listy = []
-        for i in range(b-1):
-            
-            listy.append(i)
-            i =i+1
-
         # Colors
-        colors = sns.color_palette("mako", 4)
-
+        self.colors = sns.color_palette("mako", 4)
+        self.listy = []
+        self.b = int(max(self.d3))+1
+        for i in range(self.b-1):
+            
+            self.listy.append(i)
+            i =i+1
+            
+    def plot_individual_hist(self):
+        self.import_excel_file()
         #Plot
         fig = Figure(figsize = (5, 5), dpi = 100) 
         f=fig.gca()
-        f.hist(d2, bins=listy, color=colors)
+        f.hist(self.d2, bins=self.listy, color=self.colors)
         f.set_xlabel(r'Time (weeks)', fontsize = 15)
         f.set_ylabel(r'Number of mice', fontsize = 15)
         f.set_title('MICE QUANTITY VS AGE', horizontalalignment='center', fontweight ="bold", fontsize=20)
@@ -266,74 +265,17 @@ class Application(tk.Tk):
 
         return fig 
 
-    def import_excel_file_2(self):
-        """plot simple plot
+    def plot_4_hist(self):
 
-        Returns:Four figures sharing the same x axis
-        """
-        df = pd.read_excel(filepath)
-        i=0
-        init_date = self.textbox3.get()
-        init_date[::-1]
-        final_date = self.textbox4.get()
-        final_date[::-1]
-     
-        print(init_date)
-        print(final_date)
-        
-        n_df = df[(init_date <= df.Date_of_birth) & (df.Date_of_birth <= final_date)]
-        print(df['Date_of_birth'])
-        print("")
-        print(n_df['Date_of_birth']) 
-        print("")
-                        
-        l = len(n_df['Date_of_birth'])
-        
-        df_MWt = pd.DataFrame(n_df.loc[(df['Sex']=='Male') & (n_df['Genotype']=='Wildtype') & (n_df['Status']=='Alive')])
-        df_FWt = pd.DataFrame(n_df.loc[(df['Sex']=='Female') & (n_df['Genotype']=='Wildtype') & (n_df['Status']=='Alive')])
-        df_MHet = pd.DataFrame(n_df.loc[(df['Sex']=='Male') & (n_df['Genotype']=='Heterozygous') & (n_df['Status']=='Alive')])
-        df_FHet = pd.DataFrame(n_df.loc[(df['Sex']=='Female') & (n_df['Genotype']=='Heterozygous') & (n_df['Status']=='Alive')])
-        print(len(df_MWt))
-        print(len(df_FWt))
-        print(len(df_MHet))
-        print(len(df_FHet))
-        total_data = [df_MWt, df_FWt, df_MHet, df_FHet]
-    
-        j=0 
-        d2 = []
-        for element in total_data:
-            age_in_weeks = 0
-            d1 = []
-            for index, rows in total_data[j].iterrows():
-                age_in_weeks = math.floor(n_df['Age_(days)'][index]/7)
-                d1.append(age_in_weeks)
-            j = j + 1    
-            d1.sort(reverse=True)
-            d2.append(d1)
-        print(d2)
-        d3 = [d2[0][0], d2[1][0], d2[2][0], d2[3][0]]
-        
-        # Colors
-        colors = sns.color_palette("mako", 4)
-
-        b = int(max(d3))+1
-        
-        listy = []
-        for i in range(b-1):
-            
-            listy.append(i)
-            i =i+1
-
+        self.import_excel_file()
         #Plot
         fig, axs = plt.subplots(2, 2, figsize=(8, 8), sharey=True,  tight_layout=True)
-        # axs.locator_params(axis='x', integer=True)
-        print(b)
 
         # I need to garantee its the same x axis quantity and integers
-        axs[0,0].hist(d2[0], bins=listy, color=colors[0], label='Male Wildtype', edgecolor='white')
-        axs[0,1].hist(d2[1], bins=listy, color=colors[1], label='Female Wildtype', edgecolor='white')
-        axs[1,0].hist(d2[2], bins=listy, color=colors[2], label='Male Heterozygous', edgecolor='white')
-        axs[1,1].hist(d2[3], bins=listy, color=colors[3], label='Female Heterozygous', edgecolor='white')
+        axs[0,0].hist(self.d2[0], bins=self.listy, color=self.colors[0], label='Male Wildtype', edgecolor='white')
+        axs[0,1].hist(self.d2[1], bins=self.listy, color=self.colors[1], label='Female Wildtype', edgecolor='white')
+        axs[1,0].hist(self.d2[2], bins=self.listy, color=self.colors[2], label='Male Heterozygous', edgecolor='white')
+        axs[1,1].hist(self.d2[3], bins=self.listy, color=self.colors[3], label='Female Heterozygous', edgecolor='white')
 
         axs[0,0].xaxis.set_major_locator(MaxNLocator(integer=True))
         axs[0,1].xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -355,10 +297,8 @@ class Application(tk.Tk):
         axs[1,0].legend()
         axs[1,1].legend()
 
-
-
-
-
+        plt.suptitle('MICE QUANTITY VS AGE', horizontalalignment='center', fontweight ="bold", fontsize=20)
+        return fig, axs 
         # # I need to garantee its the same x axis quantity and integers
         # axs[0,0].bar(np.arange(0,len(d2[0]),1), d2[0], color=colors[0], label='Male Wildtype', edgecolor='black')
         # axs[0,1].bar(np.arange(0,len(d2[1]),1), d2[1], color=colors[1], label='Female Wildtype', edgecolor='black')
@@ -385,8 +325,6 @@ class Application(tk.Tk):
         # axs[1,0].legend()
         # axs[1,1].legend()
 
-        plt.suptitle('MICE QUANTITY VS AGE', horizontalalignment='center', fontweight ="bold", fontsize=20)
-        return fig, axs 
 
 app = Application()
 app.geometry("1900x990+0+0")

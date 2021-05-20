@@ -26,6 +26,7 @@ from matplotlib.backends.backend_tkagg import (
 # from Plotting_mice import MyPlot
 import matplotlib.pyplot as plt
 # import xlsxwriter as xw
+
 from matplotlib.ticker import MaxNLocator
 import pandas as pd
 import numpy as np
@@ -276,7 +277,7 @@ class Application(tk.Tk):
         self.obtain_data_from_excel()
 
         # Plot
-        fig = Figure(figsize=(4, 4), dpi=100)
+        fig = plt.figure(figsize=(4, 4), dpi=100)
         f = fig.gca()
         f.hist(self.d2, bins=self.listy, color=self.colors)
         f.set_xlabel(r'Age (weeks)', fontsize=15)
@@ -285,6 +286,10 @@ class Application(tk.Tk):
                     horizontalalignment='center', fontweight="bold", fontsize=20)
 
         f.legend()
+        plot_name = str(self.init_date[::-1]) + "_" + str(self.final_date[::-1])
+        filepath_hist_plot = str(filepath2) + "/" + str(plot_name) + ".png"
+
+        hist_plot = fig.savefig(filepath_hist_plot)
 
         return fig
 
@@ -323,6 +328,9 @@ class Application(tk.Tk):
 
         plt.suptitle('MICE QUANTITY VS AGE',
                      horizontalalignment='center', fontweight="bold", fontsize=20)
+        plot_4_name = str(self.init_date[::-1]) + "_" + str(self.final_date[::-1])
+        filepath_4_plot = str(filepath2) + "/" + str(plot_4_name)+".png"
+        hist_4_plot = plt.savefig(filepath_4_plot)
         return fig, axs
 
 

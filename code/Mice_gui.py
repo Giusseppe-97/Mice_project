@@ -48,21 +48,25 @@ class Application(tk.Tk):
         """
         super().__init__(*args, **kwargs)
 
-        # Set style
+        # Set style of the GUI
         self.tk.call('source', r'../docs/style/azure.tcl')
         ttk.Style().theme_use('azure')
 
         # Create Main Frames
-        self.mainFrame1 = tk.Frame(self, bg="white")
-        self.mainFrame2 = tk.Frame(self, bg="white")
+        self.mainFrame1 = tk.Frame(self)
+        self.mainFrame2 = tk.Frame(self)
+        
+        # Create Calendar 
         self.cal = tkc.Calendar(
-            self.mainFrame1, selectmode="day", year=2021, month=5, day=1)
+            self.mainFrame1, selectbackground="#120597", background = "#120597",
+            selectmode="day", year=2021, month=5, day=1
+            )
 
         # Call methods
         self.configure_basic_tk_properties()
         self.pack_all()
 
-        # Create scrollbar
+        # # Create scrollbar
         # self.scroll_frame_1 = ttk.Scrollbar(self.mainFrame1, orient="vertical", command=self.canvas1.yview)
         # self.scroll_frame_1.pack(side='right', fill='y')
 
@@ -75,14 +79,14 @@ class Application(tk.Tk):
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
-        # Setting a background for the main App (which is going to hold the mainframe3 and other frames aswell)
-        self.configure(bg="blue")
+        # Setting a background for the main App (which is going to hold both frames)
+        self.configure(bg="light blue")
 
         # Create and place Lables for each Frame
         self.lable = tk.Label(self.mainFrame1, text="RUN DATA", foreground="white",
-                              background="#120597").place(x=0, width=1900)
+                              background="#120597").place(x=0, width=1920)
         self.lable2 = tk.Label(self.mainFrame2, text="HISTOGRAM DISPLAY PREVIEW", foreground="white",
-                               background="#120597").place(y=0, width=1900)
+                               background="#120597").place(y=0, width=1920)
 
         # Create input and output lables
         self.label3 = ttk.Label(

@@ -162,24 +162,24 @@ class Application(tk.Tk):
     def open_excel_file_location(self):
         """Open the File Explorer to select desired excel file
         """
-        global filepath
+        global filepath1
 
-        filepath = askopenfilename(filetypes=[(
+        filepath1 = askopenfilename(filetypes=[(
             "xlsx Files", "*.xlsx"), ("csv Files", "*.csv"), ("All Files", "*.*")])
 
-        if not filepath:
+        if not filepath1:
             return
-        with open(filepath, "r"):
-            self.textbox1.insert(tk.END, filepath)
+        with open(filepath1, "r"):
+            self.textbox1.insert(tk.END, filepath1)
 
     def save_results(self):
         """Open the file Explorer to select desired location to save results
         """
-        global filepath
-        filepath = askdirectory()
-        if not filepath:
+        global filepath2
+        filepath2 = askdirectory()
+        if not filepath2:
             return
-        self.textbox2.insert(tk.END, filepath)
+        self.textbox2.insert(tk.END, filepath2)
 
     def display_plot(self):
         """plot function is created for plotting the graph in tkinter window
@@ -198,13 +198,18 @@ class Application(tk.Tk):
         # creating the Matplotlib toolbar
         self.toolbar1 = NavigationToolbar2Tk(
             self.canvas1, self, pack_toolbar=False)
+        self.toolbar2 = NavigationToolbar2Tk(
+            self.canvas2, self, pack_toolbar=False)
 
         # toolbar = Embedding_in_Tk.NavigationToolbar2Tk(self.canvas, self)
         self.toolbar1.update()
+        self.toolbar2.update()
 
-        # placing the canvas on the Tkinter window
-        self.toolbar1.pack(side=tk.BOTTOM, padx=400)
+        # place the canvas on the Tkinter window
+        self.toolbar1.place(x=400, y=900)
+        self.toolbar2.place(x=1300, y=900)
 
+        # pack the widgetsinside the Tkinter canvas
         self.canvas1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.canvas2.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
@@ -212,29 +217,19 @@ class Application(tk.Tk):
             messagebox.showinfo("Warning Message",
                                 "Please select a valid Excel file path")
 
-    def import_excel(self):
-        self.df = pd.read_excel(filepath)
+    def import_excel_file(self):
+        self.df = pd.read_excel(filepath1)
         i = 0
         self.init_date = self.textbox3.get()
         self.init_date[::-1]
         self.final_date = self.textbox4.get()
         self.final_date[::-1]
 
-    def generate_data_from_excel(self):
-        """plot simple plot
-
-        Returns:Four figures sharing the same x axis
-        """
-        self.import_excel()
-        print(self.init_date)
-        print(self.final_date)
+    def obtain_data_from_excel(self):
+        self.import_excel_file()
 
         n_df = self.df[(self.init_date <= self.df.Date_of_birth) &
                   (self.df.Date_of_birth <= self.final_date)]
-        print(self.df['Date_of_birth'])
-        print("")
-        print(n_df['Date_of_birth'])
-        print("")
 
         l = len(n_df['Date_of_birth'])
 
@@ -246,10 +241,12 @@ class Application(tk.Tk):
             n_df['Genotype'] == 'Heterozygous') & (n_df['Status'] == 'Alive')])
         df_FHet = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
             n_df['Genotype'] == 'Heterozygous') & (n_df['Status'] == 'Alive')])
+
         print(len(df_MWt))
         print(len(df_FWt))
         print(len(df_MHet))
         print(len(df_FHet))
+
         total_data = [df_MWt, df_FWt, df_MHet, df_FHet]
 
         j = 0
@@ -267,55 +264,33 @@ class Application(tk.Tk):
         self.d3 = [self.d2[0][0], self.d2[1][0], self.d2[2][0], self.d2[3][0]]
 
         # Colors
-        self.colors = sns.color_palette("mako", 4)
+        self.colors = sns.color_palette("rocket", 4)
         self.listy = []
         self.b = int(max(self.d3))+1
-        for i in range(self.b-1):
-
+        for i in range(self.b):
             self.listy.append(i)
             i = i+1
 
-    # def receive_month_from_calendar(self):
-        
-    #     self.excel_sheet_vector_month = {
-    #         (1,'January'), (2,'February'), (3,'March'), (4,'April'), (5,'May'), 
-    #         (6,'June'), (7,'July'), (8,'August'), (9,'September'), (10,'October'),
-    #         (11,'November'), (12,'December')
-    #         }
-    #     m = 0
-    #     month_list = []
-    #     for m in range(10):
-    #         if int(self.init_date[6])==self.excel_sheet_vector_month[m][0]:
-    #             month_list.append(self.excel_sheet_vector_month[m][1])
-    #         else:
-    #             print("Agghhh")
-    #     n = 10
-    #     for n in range(13):
-    #         if int(self.init_date[6])==self.excel_sheet_vector_month[n][0][1]:
-    #             month_list.append(self.excel_sheet_vector_month[n][1])
-    #         else:
-    #             print("Agghhh")
-    #     print("Minth_list: ",month_list)
-
     def plot_individual_hist(self):
-        self.generate_data_from_excel()
-        # self.receive_month_from_calendar()
+
+        self.obtain_data_from_excel()
+
         # Plot
-        fig = Figure(figsize=(5, 5), dpi=100)
+        fig = Figure(figsize=(4, 4), dpi=100)
         f = fig.gca()
         f.hist(self.d2, bins=self.listy, color=self.colors)
-        f.set_xlabel(r'Time (weeks)', fontsize=15)
+        f.set_xlabel(r'Age (weeks)', fontsize=15)
         f.set_ylabel(r'Number of mice', fontsize=15)
         f.set_title('MICE QUANTITY VS AGE',
                     horizontalalignment='center', fontweight="bold", fontsize=20)
 
-        f.locator_params(axis='x', integer=True)
+        f.legend()
 
         return fig
 
     def plot_4_hist(self):
 
-        self.import_excel()
+        self.obtain_data_from_excel()
         # Plot
         fig, axs = plt.subplots(2, 2, figsize=(
             8, 8), sharey=True,  tight_layout=True)
@@ -336,15 +311,10 @@ class Application(tk.Tk):
         axs[1, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
 
         # plt.subplots_adjust(hspace=0)
-        axs[1, 0].set_xlabel(r'Time (weeks)', fontsize=15)
-        axs[1, 1].set_xlabel(r'Time (weeks)', fontsize=15)
+        axs[1, 0].set_xlabel(r'Age (weeks)', fontsize=15)
+        axs[1, 1].set_xlabel(r'Age (weeks)', fontsize=15)
         axs[0, 0].set_ylabel(r'Number of mice', fontsize=20,
                              horizontalalignment='right')
-
-        plt.sca(axs[0, 0])
-        plt.title('Male', fontsize=15)
-        plt.sca(axs[0, 1])
-        plt.title('Female', fontsize=15)
 
         axs[0, 0].legend()
         axs[0, 1].legend()
@@ -354,35 +324,11 @@ class Application(tk.Tk):
         plt.suptitle('MICE QUANTITY VS AGE',
                      horizontalalignment='center', fontweight="bold", fontsize=20)
         return fig, axs
-        # # I need to garantee its the same x axis quantity and integers
-        # axs[0,0].bar(np.arange(0,len(d2[0]),1), d2[0], color=colors[0], label='Male Wildtype', edgecolor='black')
-        # axs[0,1].bar(np.arange(0,len(d2[1]),1), d2[1], color=colors[1], label='Female Wildtype', edgecolor='black')
-        # axs[1,0].bar(np.arange(0,len(d2[2]),1), d2[2], color=colors[2], label='Male Heterozygous', edgecolor='black')
-        # axs[1,1].bar(np.arange(0,len(d2[3]),1), d2[3], color=colors[3], label='Female Heterozygous', edgecolor='black')
-
-        # axs[0,0].xaxis.set_major_locator(MaxNLocator(integer=True))
-        # axs[0,1].xaxis.set_major_locator(MaxNLocator(integer=True))
-        # axs[1,0].xaxis.set_major_locator(MaxNLocator(integer=True))
-        # axs[1,1].xaxis.set_major_locator(MaxNLocator(integer=True))
-
-        # #plt.subplots_adjust(hspace=0)
-        # axs[1,0].set_xlabel(r'Time (weeks)', fontsize=15)
-        # axs[1,1].set_xlabel(r'Time (weeks)', fontsize=15)
-        # axs[0,0].set_ylabel(r'Number of mice', fontsize =20, horizontalalignment='right')
-
-        # plt.sca(axs[0,0])
-        # plt.title('Male', fontsize=15)
-        # plt.sca(axs[0,1])
-        # plt.title('Female', fontsize=15)
-
-        # axs[0,0].legend()
-        # axs[0,1].legend()
-        # axs[1,0].legend()
-        # axs[1,1].legend()
 
 
-app = Application()
-app.geometry("1900x990+0+0")
-app.resizable(True, False)
-app.iconbitmap(r'../docs/mickey.ico')
-app.mainloop()
+if __name__ == "__main__":
+    app = Application()
+    app.geometry("1900x990+0+0")
+    app.resizable(True, False)
+    app.iconbitmap(r'../docs/mickey.ico')
+    app.mainloop()

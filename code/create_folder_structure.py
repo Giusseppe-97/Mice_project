@@ -2,7 +2,8 @@ import os
 import datetime
 import xlsxwriter
 from xlsxwriter.utility import xl_rowcol_to_cell
-# from mice_gui import import_excel_file
+from create_histograms import FigureManager
+from mice_gui import Application
 
 class FolderManager:
     """
@@ -100,6 +101,7 @@ class FolderManager:
         self.weeks_2021_excel.close()
         
     def create_excel_workbook_months(self):
+
         # Create excel workbooks (xlsx)
         self.months_2021_excel = xlsxwriter.Workbook("{}\\{}".format(
             self.directory_per_month, '{}.xlsx'.format("Months_2021")))
@@ -109,6 +111,17 @@ class FolderManager:
             (6,'June'), (7,'July'), (8,'August'), (9,'September'), (10,'October'),
             (11,'November'), (12,'December')
             ]
+        
+        # mg_o = obtain_data_from_excel()
+        # mg_p = plot_4_hist.filepath_4_plot 
+        worksheet_month = self.months_2021_excel.add_worksheet()
+        # worksheet_month.write('A2', mg_o.df_MWt)
+        # worksheet_month.write('D2', mg_o.df_FWt)
+        # worksheet_month.write('G2', mg_o.df_MHet)
+        # worksheet_month.write('J2', mg_o.df_FHet)
+        filep = str(FigureManager.generate_figures)
+        worksheet_month.insert_image('D14', filep )
+
         # Esthetic paramenters for Month's excel
         normal_text = self.months_2021_excel.add_format(
             {'bold': False, "align": "center"}
@@ -129,3 +142,4 @@ class FolderManager:
 
 if __name__ == "__main__":
     fm = FolderManager()
+    

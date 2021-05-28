@@ -34,7 +34,7 @@ from matplotlib.backends.backend_tkagg import (
 
 # from Plotting_mice import MyPlot
 import matplotlib.pyplot as plt
-# import xlsxwriter as xw
+import xlsxwriter as xw
 from matplotlib.ticker import MaxNLocator
 
 import pandas as pd
@@ -43,7 +43,7 @@ import math
 import seaborn as sns
 import datetime as dt
 
-import mice_gui as mg
+from mice_gui import Application as app
 
 class FigureManager:
     """
@@ -51,13 +51,14 @@ class FigureManager:
     projects with datetime configurations.
     :param project_name: name of the project for the FolderManager agent.
     """
-    
     def __init__(self):
         self.current_datetime = dt.datetime.now()
-        self.get_current_important_values()
         self.generate_figures()
 
     def generate_figures(self):
-        plot1 = mg.plot_individual_hist().hist_plot
-        plot2 = mg.plot_4_hist().hist_4_plot
-
+        # plot1 = mg.plot_individual_hist().hist_plot
+        plot2 = app.plot_4_hist().hist_4_plot
+        # fp1 = mg.filepath_hist_plot
+        fp2 = app.filepath_4_plot
+        return fp2 
+        

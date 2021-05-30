@@ -72,7 +72,7 @@ class Application(tk.Tk):
         # Call methods
         self.configure_basic_tk_properties()
         self.pack_all()
-        
+
 # reset button not programmed yet
     def configure_basic_tk_properties(self):
         """This method configures the basic tkinter esthetic properties for the GUI
@@ -154,6 +154,7 @@ class Application(tk.Tk):
         self.textbox4.insert(tk.END, self.cal.selection_get())
         self.final_month = self.cal.selection_get().strftime("%B")
 # pack and reset button not placed yet, just packed
+
     def pack_all(self):
 
         self.mainFrame1.place(x=0, y=0, height=600, width=1950)
@@ -184,6 +185,7 @@ class Application(tk.Tk):
         self.canvas1.place(x=100, y=40, height=600, width=800)
         self.canvas2.place(x=1000, y=40, height=600, width=800)
 # Data tale path reproducible to other devices, not only for this one
+
     def open_excel_file_location(self):
         """Open the File Explorer to select desired excel file
         """
@@ -196,6 +198,7 @@ class Application(tk.Tk):
         with open(filepath1, "r"):
             self.textbox1.insert(tk.END, filepath1)
 # Save path now reproducible to other devices, not only for this one
+
     def save_results(self):
         """Open the file Explorer to select desired location to save results
         """
@@ -261,12 +264,13 @@ class Application(tk.Tk):
         birth_FWt = []
         birth_MHet = []
         birth_FHet = []
-        
+
         for index, rows in df_MWt.iterrows():
             a = str(n_df['Date_of_birth'][index])
             birth_MWt.append(a[:10])
         print(len(birth_MWt))
 
+# There are 4 loops that are doing the same thing. There should be a way to reduce this
         df_FWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
             n_df['Genotype'] == 'Wildtype') & (n_df['Status'] == 'Alive')])
 
@@ -289,9 +293,9 @@ class Application(tk.Tk):
             birth_FHet.append(a[:10])
 
         birthday = [birth_MWt, birth_FWt, birth_MHet, birth_FHet]
-        total_data = [df_MWt, df_FWt, df_MHet, df_FHet]
+        # total_data = [df_MWt, df_FWt, df_MHet, df_FHet]
         print(n_df)
-       
+
         self.d2 = []
 
         for i in range(len(birthday)):
@@ -299,19 +303,13 @@ class Application(tk.Tk):
             d1 = []
             j = 0
             for j in range(len(birthday[i])):
+
                 a1 = str(self.final_date)
-                print(a1)
                 aa = dt.strptime(a1, "%Y-%m-%d")
-
                 b1 = str(birthday[i][j])
-                print(b1)
                 bb = dt.strptime(b1, "%Y-%m-%d")
-                
                 bd = abs((bb - aa).days)
-                print(bd)
-
                 age_in_weeks = bd//7
-                print(age_in_weeks)
 
                 d1.append(age_in_weeks)
                 j = j + 1
@@ -335,7 +333,7 @@ class Application(tk.Tk):
         if len(self.d4) == 4:
             self.b = 3
         else:
-            self.b = int(max(self.d3))+4
+            self.b = int(max(self.d3))+1
 
         for i in range(self.b):
             self.listy.append(i)
@@ -351,7 +349,7 @@ class Application(tk.Tk):
         f = fig.gca()
         # ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         # ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-        
+
         f.hist(self.d2, bins=self.listy, color=self.colors)
         f.set_xlabel(r'Age (weeks)', fontsize=15)
         f.set_ylabel(r'Number of mice', fontsize=15)
@@ -361,11 +359,13 @@ class Application(tk.Tk):
         f.legend(['M_WT', 'F_WT', 'M_HET', 'F_HET'])
 
         if self.init_month != self.final_month:
-            self.plot_name = str(self.init_month) + "-"  + str(self.final_month) + "_histogram"
+            self.plot_name = str(self.init_month) + "-" + \
+                str(self.final_month) + "_histogram"
         else:
             self.plot_name = str(self.init_month) + "_histogram"
 
-        filepath_hist_plot = str(filepath2) + "/" + str(self.plot_name) + ".png"
+        filepath_hist_plot = str(filepath2) + "/" + \
+            str(self.plot_name) + ".png"
         hist_plot = fig.savefig(filepath_hist_plot)
 
         return fig
@@ -414,11 +414,13 @@ class Application(tk.Tk):
                      horizontalalignment='center', fontweight="bold", fontsize=20)
 
         if self.init_month != self.final_month:
-            self.plot_4_name = str(self.init_month) + "-"  + str(self.final_month) 
+            self.plot_4_name = str(self.init_month) + \
+                "-" + str(self.final_month)
         else:
             self.plot_4_name = str(self.init_month)
 
-        self.filepath_4_plot = str(filepath2) + "/" + str(self.plot_4_name)+".png"
+        self.filepath_4_plot = str(filepath2) + "/" + \
+            str(self.plot_4_name)+".png"
         hist_4_plot = plt.savefig(self.filepath_4_plot)
         self.hist_4_plot = openpyxl.drawing.image.Image(self.filepath_4_plot)
 
@@ -474,21 +476,21 @@ class FolderManager(Application):
     def create_jpeg_from_figures(self):
         pass
 
+
 class ExcelDevelopement(Application):
 
     def __init__(self):
 
         self.create_excel_workbook_months()
-    
+
     def create_excel_workbook_months(self):
 
-        d2 = [[6 ,6 ,6 ,5 ,5, 2, 2, 2, 2, 1, 0], [4, 3, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0], [0], [3, 1, 0]]
-        [[1, 1, 1, 1, 1, 0], [2, 2, 1, 1, 0], [2, 1, 1, 1, 0], [2, 1, 1, 1, 1]]
+        d2 = [[4, 4, 4, 4, 4, 4, 4], [4, 4, 4, 4], [4, 4, 4], [4, 4, 4, 4, 4, 4]]
         months_2021_excel_wb = Workbook()
-        worksheet_month_ws =  months_2021_excel_wb.active
+        worksheet_month_ws = months_2021_excel_wb.active
         worksheet_month_ws.title = "Changed Sheet"
 
-        longest_list_size = 0
+        longest_list_size = len(d2[0])
         list_dic = []
         i = 0
         j = 0
@@ -496,47 +498,49 @@ class ExcelDevelopement(Application):
         l = 0
 
         for k in range(4):
-                if len(d2[k])>len(d2[0]):
-                        longest_list_size = len(d2[k]) 
+            if len(d2[k]) > len(d2[0]):
+                longest_list_size = len(d2[k])
+            
 
-        dic_mic={}
-        for longest_list_size in range(longest_list_size,-1,-1):
-                dic_mic.setdefault(longest_list_size,[]).append(0)
+        dic_mic = {}
+        for longest_list_size in range(longest_list_size, -1, -1):
+            dic_mic.setdefault(longest_list_size, []).append(0)
 
         list_of_dic = []
-        data = ['Male Wildtype', 'Female Wildtype', 'Male Heterozygous', 'Female Heterozygous']
+        data = ['Male Wildtype', 'Female Wildtype',
+                'Male Heterozygous', 'Female Heterozygous']
 
         for i in range(4):
-                
-                dic_mice = dict()
-                num_of_mice = []
-                age_mice_weeks = []
-                for j in range(len(d2[i])):
 
-                        if d2[i][j] not in age_mice_weeks:
-                                age_mice_weeks.append(d2[i][j])
-                                num_of_mice = d2[i].count(d2[i][j])
-                                dic_mice.setdefault(d2[i][j],[]).append(num_of_mice)
+            dic_mice = dict()
+            num_of_mice = []
+            age_mice_weeks = []
+            for j in range(len(d2[i])):
 
-                dic_mice = {key: dic_mice.get(key, dic_mic[key]) for key in dic_mic}
-                df = pd.DataFrame.from_dict(dic_mice) 
-                list_dic.append(df)
-                
-                print(data[i])
-                print(df.to_string(index=False))
+                if d2[i][j] not in age_mice_weeks:
+                    age_mice_weeks.append(d2[i][j])
+                    num_of_mice = d2[i].count(d2[i][j])
+                    dic_mice.setdefault(d2[i][j], []).append(num_of_mice)
+
+            dic_mice = {key: dic_mice.get(
+                key, dic_mic[key]) for key in dic_mic}
+            df = pd.DataFrame.from_dict(dic_mice)
+            list_dic.append(df)
+
+            print(data[i])
+            print(df.to_string(index=False))
         print(list_dic)
 
         result = pd.concat(list_dic)
-        print(result.to_string( index = False))
+        print(result.to_string(index=False))
 
-        rows = dataframe_to_rows(result,index = False)
+        rows = dataframe_to_rows(result, index=False)
 
         for r_idx, row in enumerate(rows, 1):
-                for c_idx, value in enumerate(row, 1):
-                        worksheet_month_ws.cell(row=r_idx, column=c_idx, value=value)
+            for c_idx, value in enumerate(row, 1):
+                worksheet_month_ws.cell(row=r_idx, column=c_idx, value=value)
 
-        months_2021_excel_wb.save(filename = 'results/sample_book.xlsx')
-
+        months_2021_excel_wb.save(filename='results/sample_book.xlsx')
 
         # self.hist_4_plot.anchor(self.plot_name.cell('A20'))
         # self.plot_name.add_image(self.hist_4_plot)
@@ -550,5 +554,5 @@ if __name__ == "__main__":
     app.resizable(True, False)
     app.iconbitmap(r'../docs/mickey.ico')
     app.mainloop()
-    # fm = FolderManager()
-    # ed = ExcelDevelopement()
+    fm = FolderManager()
+    ed = ExcelDevelopement()

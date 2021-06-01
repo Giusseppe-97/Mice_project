@@ -331,30 +331,33 @@ class Application(tk.Tk):
         self.listy = []
 
         if len(self.d4) == 4:
-            self.b = 3
+            self.b = 5
         else:
-            self.b = int(max(self.d3))+1
+            self.b = int(max(self.d3))+3
 
-        for i in range(self.b):
-            self.listy.append(i)
-            i = i+1
+        r=0
+
+        for i in range(self.b+1):
+            self.listy.append(r)
+            r = r+1
 
     def plot_individual_hist(self):
 
         self.obtain_data_from_excel()
 
         # Plot
-        plt.ticklabel_format(style='sci')
+        
         fig = plt.figure(figsize=(5, 5), dpi=100)
         f = fig.gca()
-        # ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        # ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-
-        f.hist(self.d2, bins=self.listy, color=self.colors)
+        
+        f.hist(self.d2, bins=self.listy , color=self.colors)
         f.set_xlabel(r'Age (weeks)', fontsize=15)
         f.set_ylabel(r'Number of mice', fontsize=15)
         f.set_title('NUMBER OF MICE VS AGE',
                     horizontalalignment='center', fontweight="bold", fontsize=20)
+
+        f.xaxis.set_major_locator(MaxNLocator(nbins=len(self.listy)))
+        f.xaxis.set_major_locator(MaxNLocator(integer=True))
 
         f.legend(['M_WT', 'F_WT', 'M_HET', 'F_HET'])
 
@@ -423,6 +426,7 @@ class Application(tk.Tk):
             str(self.plot_4_name)+".png"
         hist_4_plot = plt.savefig(self.filepath_4_plot)
         self.hist_4_plot = openpyxl.drawing.image.Image(self.filepath_4_plot)
+        
 
         return fig, axs
 
@@ -496,6 +500,7 @@ class ExcelDevelopement(Application):
         j = 0
         k = 0
         l = 0
+        
 
         for k in range(4):
             if len(d2[k]) > len(d2[0]):

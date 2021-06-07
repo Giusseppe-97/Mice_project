@@ -39,6 +39,7 @@ import datetime
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import openpyxl
+import xlsxwriter
 
 # from PIL import ImageTk, Image
 
@@ -319,6 +320,7 @@ class Application(tk.Tk):
 
         self.d3 = []
         self.d4 = []
+
         es = 0
         for es in range(4):
             if self.d2[es] != []:
@@ -335,7 +337,7 @@ class Application(tk.Tk):
         else:
             self.b = int(max(self.d3))+3
 
-        r=0
+        r = 0
 
         for i in range(self.b+1):
             self.listy.append(r)
@@ -346,11 +348,11 @@ class Application(tk.Tk):
         self.obtain_data_from_excel()
 
         # Plot
-        
+
         fig = plt.figure(figsize=(5, 5), dpi=100)
         f = fig.gca()
-        
-        f.hist(self.d2, bins=self.listy , color=self.colors)
+
+        f.hist(self.d2, bins=self.listy, color=self.colors)
         f.set_xlabel(r'Age (weeks)', fontsize=15)
         f.set_ylabel(r'Number of mice', fontsize=15)
         f.set_title('NUMBER OF MICE VS AGE',
@@ -425,8 +427,7 @@ class Application(tk.Tk):
         self.filepath_4_plot = str(filepath2) + "/" + \
             str(self.plot_4_name)+".png"
         hist_4_plot = plt.savefig(self.filepath_4_plot)
-        self.hist_4_plot = openpyxl.drawing.image.Image(self.filepath_4_plot)
-        
+        # self.hist_4_plot = openpyxl.drawing.image.Image(self.filepath_4_plot)
 
         return fig, axs
 
@@ -434,7 +435,7 @@ class Application(tk.Tk):
         self.pop_up_message()
 
 
-class FolderManager(Application):
+class FolderManager:
     """
     Enables the creation and management of folder structures for multipurpose 
     projects with datetime configurations.
@@ -477,80 +478,78 @@ class FolderManager(Application):
         if not os.path.exists(self.directory_plots_month):
             os.makedirs(self.directory_plots_month)
 
+    def get_path_for_results(self):
+        return self.directory_plots_month
+
     def create_jpeg_from_figures(self):
         pass
 
 
-class ExcelDevelopement(Application):
+class ExcelDevelopement:
 
-    def __init__(self):
+    def __init__(self, app_object):
+
+        self.app_object = app_object
+        self.fm = FolderManager()
 
         self.create_excel_workbook_months()
 
     def create_excel_workbook_months(self):
 
-        d2 = [[4, 4, 4, 4, 4, 4, 4], [4, 4, 4, 4], [4, 4, 4], [4, 4, 4, 4, 4, 4]]
-        months_2021_excel_wb = Workbook()
-        worksheet_month_ws = months_2021_excel_wb.active
-        worksheet_month_ws.title = "Changed Sheet"
+        d2 = self.app_object.d2
 
-        longest_list_size = len(d2[0])
-        list_dic = []
-        i = 0
-        j = 0
-        k = 0
-        l = 0
-        
+        wb = xlsxwriter.Workbook("{}\\{}".format(
+            self.fm.get_path_for_results(), "data_results.xlsx"))
+        center_bold_border = wb.add_format(
+            {"bold": True, "align": "center", "border": True})
+        center_border = wb.add_format({"align": "center", "border": True})
 
-        for k in range(4):
-            if len(d2[k]) > len(d2[0]):
-                longest_list_size = len(d2[k])
+        ws = wb.add_worksheet("{}".format(self.fm.month))
+
+        chart_names = ['Male Wildtype', 'Female Wildtype',
+                       'Male Heterozygous', 'Female Heterozygous']
+
+        row, col = 0, 0
+        for chart in range(len(chart_names)):
+
+            # Add charts title
+            ws.merge_range(row, col, row, col+1,
+                           "{}".format(chart_names[chart]), center_bold_border)
+
+            # Add charts subtitles
+            row += 1
+            ws.write(row, col, "Age", center_border)
+            ws.write(row, col+1, "mice #", center_border)
+
+            # Add charts data
+            row += 1
+            print(d2[chart])
+            dic_mice = {}
+
+
+            # Count mice based on ages and adding to dictionary
+            for i in range(len(d2[chart])):
+                if str(d2[chart][i]) in dic_mice:
+                    dic_mice["{}".format(
+                        d2[chart][i])] = dic_mice["{}".format(d2[chart][i])]+1
+                else:
+                    dic_mice["{}".format(d2[chart][i])] = 1
+
+            print(dic_mice)
             
+            # write data from dictionary of ages and number of mice  
+            for age in dic_mice:
+                ws.write(row, col, "{}".format(age), center_border)
+                ws.write(row, col+1, "{}".format(dic_mice[age]), center_border)
+                row += 1
+      
+            # Move to next chart
+            row = 0
+            col += 3
+        # Insert the image created for the specific 
+        ws.insert_image(row, col, '{}\\May_histogram.png'.format(self.fm.get_path_for_results()))
 
-        dic_mic = {}
-        for longest_list_size in range(longest_list_size, -1, -1):
-            dic_mic.setdefault(longest_list_size, []).append(0)
-
-        list_of_dic = []
-        data = ['Male Wildtype', 'Female Wildtype',
-                'Male Heterozygous', 'Female Heterozygous']
-
-        for i in range(4):
-
-            dic_mice = dict()
-            num_of_mice = []
-            age_mice_weeks = []
-            for j in range(len(d2[i])):
-
-                if d2[i][j] not in age_mice_weeks:
-                    age_mice_weeks.append(d2[i][j])
-                    num_of_mice = d2[i].count(d2[i][j])
-                    dic_mice.setdefault(d2[i][j], []).append(num_of_mice)
-
-            dic_mice = {key: dic_mice.get(
-                key, dic_mic[key]) for key in dic_mic}
-            df = pd.DataFrame.from_dict(dic_mice)
-            list_dic.append(df)
-
-            print(data[i])
-            print(df.to_string(index=False))
-        print(list_dic)
-
-        result = pd.concat(list_dic)
-        print(result.to_string(index=False))
-
-        rows = dataframe_to_rows(result, index=False)
-
-        for r_idx, row in enumerate(rows, 1):
-            for c_idx, value in enumerate(row, 1):
-                worksheet_month_ws.cell(row=r_idx, column=c_idx, value=value)
-
-        months_2021_excel_wb.save(filename='results/sample_book.xlsx')
-
-        # self.hist_4_plot.anchor(self.plot_name.cell('A20'))
-        # self.plot_name.add_image(self.hist_4_plot)
-        # months_2021_excel_wb.save("{}\\{}".format(
-        #     self.directory_per_month, '{}.xlsx'.format("Months_2021")))
+        wb.close()
 
 
 if __name__ == "__main__":
@@ -559,5 +558,5 @@ if __name__ == "__main__":
     app.resizable(True, False)
     app.iconbitmap(r'../docs/mickey.ico')
     app.mainloop()
-    fm = FolderManager()
-    ed = ExcelDevelopement()
+
+    ed = ExcelDevelopement(app)

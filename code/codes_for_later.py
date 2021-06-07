@@ -195,3 +195,65 @@ print(d)
         # # time datetime for loop to add sheets in positions of the vector
         # self.excel_sheet_vector_month.append(self.months_2021_excel.add_worksheet(
         #         "{}".format(self.excel_sheet_vector_month[0][1])))
+
+
+
+        # months_2021_excel_wb = Workbook()
+        # worksheet_month_ws = months_2021_excel_wb.active
+        # worksheet_month_ws.title = "Changed Sheet"
+
+        # longest_list_size = len(d2[0])
+        # list_dic = []
+        # i = 0
+        # j = 0
+        # k = 0
+        # l = 0
+
+        # for k in range(4):
+        #     if len(d2[k]) > len(d2[0]):
+        #         longest_list_size = len(d2[k])
+            
+        # dic_mic = {}
+        # for longest_list_size in range(longest_list_size, -1, -1):
+        #     dic_mic.setdefault(longest_list_size, []).append(0)
+
+        # list_of_dic = []
+        # data = ['Male Wildtype', 'Female Wildtype',
+        #         'Male Heterozygous', 'Female Heterozygous']
+
+        # for i in range(4):
+
+        #     dic_mice = dict()
+        #     num_of_mice = []
+        #     age_mice_weeks = []
+        #     for j in range(len(d2[i])):
+
+        #         if d2[i][j] not in age_mice_weeks:
+        #             age_mice_weeks.append(d2[i][j])
+        #             num_of_mice = d2[i].count(d2[i][j])
+        #             dic_mice.setdefault(d2[i][j], []).append(num_of_mice)
+
+        #     dic_mice = {key: dic_mice.get(
+        #         key, dic_mic[key]) for key in dic_mic}
+        #     df = pd.DataFrame.from_dict(dic_mice)
+        #     list_dic.append(df)
+
+        #     print(data[i])
+        #     print(df.to_string(index=False))
+        # # print(list_dic)
+
+        # result = pd.concat(list_dic)
+        # # print(result.to_string(index=False))
+
+        # rows = dataframe_to_rows(result, index=False)
+
+        # for r_idx, row in enumerate(rows, 1):
+        #     for c_idx, value in enumerate(row, 1):
+        #         worksheet_month_ws.cell(row=r_idx, column=c_idx, value=value)
+
+        # months_2021_excel_wb.save(filename='results/sample_book.xlsx')
+
+               # self.hist_4_plot.anchor(self.plot_name.cell('A20'))
+        # self.plot_name.add_image(self.hist_4_plot)
+        # months_2021_excel_wb.save("{}\\{}".format(
+        #     self.directory_per_month, '{}.xlsx'.format("Months_2021")))

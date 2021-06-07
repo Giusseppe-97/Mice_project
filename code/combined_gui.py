@@ -55,7 +55,7 @@ class Application(tk.Tk):
         """
 
         super().__init__(*args, **kwargs)
-
+    
         # Set style of the GUI
         self.tk.call('source', r'../docs/style/azure.tcl')
         ttk.Style().theme_use('azure')
@@ -129,7 +129,7 @@ class Application(tk.Tk):
             self.mainFrame1, text="Save ", command=lambda: [self.save_results()]
         )
         self.button3 = ttk.Checkbutton(
-            self.mainFrame1, text="RUN", style='ToggleButton', command=self.display_plot
+            self.mainFrame1, text="Run", style='ToggleButton', command=self.display_plot
         )
         self.button5 = ttk.Button(
             self, text="Start date", command=self.grab_start_date
@@ -140,12 +140,12 @@ class Application(tk.Tk):
         self.button_quit = ttk.Button(
             master=self, text="Quit", command=self.quit
         )
-        # self.button_reset = ttk.Button(
-        #     master=self, text="Reset", command=lambda:[self.quit, self.reset_app])
+        self.button_reset = ttk.Button(
+            master=self, text="Reset", command=self.reset_app)
 
         # Create Canvas (where Histograms are going to be placed as matplotlib Figures)
-        self.canvas1 = tk.Canvas(self.mainFrame2)
-        self.canvas2 = tk.Canvas(self.mainFrame2)
+        self.canvas01 = tk.Canvas(self.mainFrame2)
+        self.canvas02 = tk.Canvas(self.mainFrame2)
 
     def grab_start_date(self):
         self.textbox3.insert(tk.END, self.cal.selection_get())
@@ -174,17 +174,17 @@ class Application(tk.Tk):
 
         self.button1.place(x=900, y=70, height=40, width=120)
         self.button2.place(x=900, y=140, height=40, width=120)
-        self.button3.place(x=1100, y=100)
+        self.button3.place(x=1100, y=70)
+        self.button_reset.place(x=1100, y = 140)
         self.button5.place(x=1450, y=70, height=40)
         self.button4.place(x=1450, y=140, height=40)
         self.button_quit.pack(side=tk.BOTTOM, pady=10)
-        # self.button_reset.pack(side=tk.BOTTOM, pady=100)
 
         self.cal.place(x=1550, y=30, rely=0.005,
                        relx=0.02, height=210, width=300)
 
-        self.canvas1.place(x=100, y=40, height=600, width=800)
-        self.canvas2.place(x=1000, y=40, height=600, width=800)
+        self.canvas01.place(x=100, y=40, height=600, width=800)
+        self.canvas02.place(x=1000, y=40, height=600, width=800)
 # Data tale path reproducible to other devices, not only for this one
 
     def open_excel_file_location(self):
@@ -217,8 +217,8 @@ class Application(tk.Tk):
         fig2, ax = self.plot_4_hist()
 
         # create canvas and draw figures into canvas
-        self.canvas2 = FigureCanvasTkAgg(fig, master=self.canvas2)
-        self.canvas1 = FigureCanvasTkAgg(fig2, master=self.canvas1)
+        self.canvas2 = FigureCanvasTkAgg(fig, master=self.canvas02)
+        self.canvas1 = FigureCanvasTkAgg(fig2, master=self.canvas01)
         self.canvas1.draw()
         self.canvas2.draw()
 
@@ -237,6 +237,14 @@ class Application(tk.Tk):
 # better if they where placed # pack the widgetsinside the Tkinter canvas
         self.canvas1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.canvas2.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+    def reset_app(self):
+        self.canvas1.get_tk_widget().destroy()
+        self.canvas2.get_tk_widget().destroy()
+        self.toolbar1.destroy()
+        self.toolbar2.destroy()
+        # self.textbox3.clear()
+        # self.textbox4.clear()
 
     def import_excel_file(self):
         self.df = pd.read_excel(filepath1)
@@ -430,10 +438,6 @@ class Application(tk.Tk):
         # self.hist_4_plot = openpyxl.drawing.image.Image(self.filepath_4_plot)
 
         return fig, axs
-
-    def reset_app(self):
-        self.pop_up_message()
-
 
 class FolderManager:
     """

@@ -163,9 +163,9 @@ class Application(tk.Tk):
 
         self.label3.place(x=20, y=70, height=40, width=80)
         self.label4.place(x=20, y=140, height=40, width=80)
-        self.label5.place(x=1250, y=30, height=30)
-        self.label6.place(x=1250, y=70, height=30)
-        self.label7.place(x=1250, y=140, height=30)
+        self.label5.place(x=1300, y=30, height=30)
+        self.label6.place(x=1250, y=80, height=30)
+        self.label7.place(x=1250, y=150, height=30)
 
         self.textbox1.place(x=80, y=70, height=40, width=800)
         self.textbox2.place(x=80, y=140, height=40, width=800)
@@ -174,8 +174,8 @@ class Application(tk.Tk):
 
         self.button1.place(x=900, y=70, height=40, width=120)
         self.button2.place(x=900, y=140, height=40, width=120)
-        self.button3.place(x=1100, y=70)
-        self.button_reset.place(x=1100, y = 140)
+        self.button3.place(x=1080, y=70, height=60, width=140)
+        self.button_reset.place(x=1090, y = 140)
         self.button5.place(x=1450, y=70, height=40)
         self.button4.place(x=1450, y=140, height=40)
         self.button_quit.pack(side=tk.BOTTOM, pady=10)
@@ -247,7 +247,7 @@ class Application(tk.Tk):
         # self.textbox4.clear()
 
     def import_excel_file(self):
-        self.df = pd.read_excel(filepath1)
+        self.df = pd.read_excel(filepath1, sheet_name=0)
 
     def obtain_data_from_excel(self):
         self.import_excel_file()
@@ -267,7 +267,7 @@ class Application(tk.Tk):
 
         # Selects data from the excel file for sex, genotype and status (only mice that are alive)
         df_MWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
-            n_df['Genotype'] == 'Wildtype') & (n_df['Status'] == 'Alive')])
+            n_df['Genotype'] == 'Null(-)') & (n_df['Status'] == 'Alive')])
 
         birth_MWt = []
         birth_FWt = []
@@ -281,21 +281,21 @@ class Application(tk.Tk):
 
 # There are 4 loops that are doing the same thing. There should be a way to reduce this
         df_FWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
-            n_df['Genotype'] == 'Wildtype') & (n_df['Status'] == 'Alive')])
+            n_df['Genotype'] == 'Null(-)') & (n_df['Status'] == 'Alive')])
 
         for index, rows in df_FWt.iterrows():
             a = str(n_df['Date_of_birth'][index])
             birth_FWt.append(a[:10])
 
         df_MHet = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
-            n_df['Genotype'] == 'Heterozygous') & (n_df['Status'] == 'Alive')])
+            n_df['Genotype'] == 'R403Q(+/-)') & (n_df['Status'] == 'Alive')])
 
         for index, rows in df_MHet.iterrows():
             a = str(n_df['Date_of_birth'][index])
             birth_MHet.append(a[:10])
 
         df_FHet = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
-            n_df['Genotype'] == 'Heterozygous') & (n_df['Status'] == 'Alive')])
+            n_df['Genotype'] == 'R403Q(+/-)') & (n_df['Status'] == 'Alive')])
 
         for index, rows in df_FHet.iterrows():
             a = str(n_df['Date_of_birth'][index])
@@ -392,16 +392,16 @@ class Application(tk.Tk):
 
         # I need to garantee its the same x axis quantity and integers
         axs[0, 0].hist(self.d2[0], bins=self.listy, color=self.colors[0],
-                       label='Male Wildtype', edgecolor='white')
+                       label='Male Null', edgecolor='white')
 
         axs[0, 1].hist(self.d2[1], bins=self.listy, color=self.colors[1],
-                       label='Female Wildtype', edgecolor='white')
+                       label='Female Null', edgecolor='white')
 
         axs[1, 0].hist(self.d2[2], bins=self.listy, color=self.colors[2],
-                       label='Male Heterozygous', edgecolor='white')
+                       label='Male R403Q(+/-)', edgecolor='white')
 
         axs[1, 1].hist(self.d2[3], bins=self.listy, color=self.colors[3],
-                       label='Female Heterozygous', edgecolor='white')
+                       label='Female R403Q(+/-)', edgecolor='white')
 
         axs[0, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
         axs[0, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -415,7 +415,7 @@ class Application(tk.Tk):
         # plt.subplots_adjust(hspace=0)
         axs[1, 0].set_xlabel(r'Age (weeks)', fontsize=15)
         axs[1, 1].set_xlabel(r'Age (weeks)', fontsize=15)
-        axs[0, 0].set_ylabel(r'Number of mice', fontsize=20,
+        axs[0, 0].set_ylabel(r'Number of mice', fontsize=15,
                              horizontalalignment='right')
 
         axs[0, 0].legend()
@@ -434,8 +434,7 @@ class Application(tk.Tk):
 
         self.filepath_4_plot = str(filepath2) + "/" + \
             str(self.plot_4_name)+".png"
-        hist_4_plot = plt.savefig(self.filepath_4_plot)
-        # self.hist_4_plot = openpyxl.drawing.image.Image(self.filepath_4_plot)
+        self.hist_4_plot = plt.savefig(self.filepath_4_plot)
 
         return fig, axs
 
@@ -501,6 +500,8 @@ class ExcelDevelopement:
     def create_excel_workbook_months(self):
 
         d2 = self.app_object.d2
+        plot_name_four = str(self.app_object.plot_4_name)
+        p = "/results/2021_monthly_results/"+ plot_name_four + ".png"
 
         wb = xlsxwriter.Workbook("{}\\{}".format(
             self.fm.get_path_for_results(), "data_results.xlsx"))
@@ -510,8 +511,8 @@ class ExcelDevelopement:
 
         ws = wb.add_worksheet("{}".format(self.fm.month))
 
-        chart_names = ['Male Wildtype', 'Female Wildtype',
-                       'Male Heterozygous', 'Female Heterozygous']
+        chart_names = ['Male Null(-) ', 'Female Null(-) ',
+                       'Male R403Q(+/-)', 'Female R403Q(+/-)']
 
         row, col = 0, 0
         for chart in range(len(chart_names)):
@@ -551,9 +552,11 @@ class ExcelDevelopement:
             row = 0
             col += 3
         # Insert the image created for the specific 
-        ws.insert_image(row, col, '{}\\May_histogram.png'.format(self.fm.get_path_for_results()))
+
+        ws.insert_image(row, col, p, {'x_scale': 0.65, 'y_scale': 0.65})
 
         wb.close()
+        
 
 
 if __name__ == "__main__":
@@ -562,5 +565,4 @@ if __name__ == "__main__":
     app.resizable(True, False)
     app.iconbitmap(r'../docs/mickey.ico')
     app.mainloop()
-
     ed = ExcelDevelopement(app)

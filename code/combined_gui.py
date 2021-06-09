@@ -481,7 +481,7 @@ class FolderManager:
             os.makedirs(self.directory_plots_month)
 
     def get_path_for_results(self):
-        return self.directory_plots_month
+        return self.directory_per_month
 
     def create_jpeg_from_figures(self):
         pass

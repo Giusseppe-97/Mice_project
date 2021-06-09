@@ -12,8 +12,7 @@ except:
     pass
 
 import tkinter as tk
-from tkinter import StringVar, ttk
-from pandas.core.series import Series
+from tkinter import ttk
 import tkcalendar as tkc
 from tkinter import messagebox
 
@@ -28,13 +27,11 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import pandas as pd
 import numpy as np
-import math
 import seaborn as sns
 
 import os
 from datetime import datetime as dt
 import datetime
-
 
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -148,12 +145,17 @@ class Application(tk.Tk):
         self.canvas02 = tk.Canvas(self.mainFrame2)
 
     def grab_start_date(self):
+        if len(self.textbox3.get()) != 0:
+            self.textbox3.delete(0, 'end')
         self.textbox3.insert(tk.END, self.cal.selection_get())
         self.init_month = self.cal.selection_get().strftime("%B")
 
     def grab_end_date(self):
+        if len(self.textbox4.get()) != 0:
+            self.textbox4.delete(0, 'end')
         self.textbox4.insert(tk.END, self.cal.selection_get())
         self.final_month = self.cal.selection_get().strftime("%B")
+
 # pack and reset button not placed yet, just packed
 
     def pack_all(self):
@@ -174,7 +176,7 @@ class Application(tk.Tk):
 
         self.button1.place(x=900, y=70, height=40, width=120)
         self.button2.place(x=900, y=140, height=40, width=120)
-        self.button3.place(x=1080, y=70, height=60, width=140)
+        self.button3.place(x=1090, y=70, height=60, width=120)
         self.button_reset.place(x=1090, y = 140)
         self.button5.place(x=1450, y=70, height=40)
         self.button4.place(x=1450, y=140, height=40)
@@ -185,12 +187,15 @@ class Application(tk.Tk):
 
         self.canvas01.place(x=100, y=40, height=600, width=800)
         self.canvas02.place(x=1000, y=40, height=600, width=800)
+
 # Data tale path reproducible to other devices, not only for this one
 
     def open_excel_file_location(self):
         """Open the File Explorer to select desired excel file
         """
         global filepath1
+        if len(self.textbox1.get()) != 0:
+            self.textbox1.delete(0, 'end')
         filepath1 = askopenfilename(filetypes=[(
             "xlsx Files", "*.xlsx"), ("csv Files", "*.csv"), ("All Files", "*.*")])
 
@@ -198,12 +203,15 @@ class Application(tk.Tk):
             filepath1 = "../data/Mice_table.xlsx"
         with open(filepath1, "r"):
             self.textbox1.insert(tk.END, filepath1)
+
 # Save path now reproducible to other devices, not only for this one
 
     def save_results(self):
         """Open the file Explorer to select desired location to save results
         """
         global filepath2
+        if len(self.textbox2.get()) != 0:
+            self.textbox2.delete(0, 'end')
         filepath2 = askdirectory()
         if not filepath2:
             filepath2 = "results/2021_monthly_results/plots_per_month"
@@ -565,3 +573,6 @@ if __name__ == "__main__":
     app.iconbitmap(r'../docs/mickey.ico')
     app.mainloop()
     ed = ExcelDevelopement(app)
+
+
+

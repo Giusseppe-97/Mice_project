@@ -247,7 +247,8 @@ class Application(tk.Tk):
         # self.textbox4.clear()
 
     def import_excel_file(self):
-        self.df = pd.read_excel(filepath1, sheet_name=0)
+        self.df = pd.read_excel(filepath1, sheet_name="Mouse List")
+        print(self.df)
 
     def obtain_data_from_excel(self):
         self.import_excel_file()
@@ -262,8 +263,6 @@ class Application(tk.Tk):
         # Limit data from the excel file for the chosen period of time
         n_df = self.df[(self.init_date <= self.df.Date_of_birth) &
                        (self.df.Date_of_birth <= self.final_date)]
-
-        l = len(n_df['Date_of_birth'])
 
         # Selects data from the excel file for sex, genotype and status (only mice that are alive)
         df_MWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
@@ -343,7 +342,7 @@ class Application(tk.Tk):
         if len(self.d4) == 4:
             self.b = 5
         else:
-            self.b = int(max(self.d3))+3
+            self.b = int(max(self.d3))+1
 
         r = 0
 
@@ -501,7 +500,7 @@ class ExcelDevelopement:
 
         d2 = self.app_object.d2
         plot_name_four = str(self.app_object.plot_4_name)
-        p = "/results/2021_monthly_results/"+ plot_name_four + ".png"
+        p = "results/2021_monthly_results/plots_per_month/"+ plot_name_four + ".png"
 
         wb = xlsxwriter.Workbook("{}\\{}".format(
             self.fm.get_path_for_results(), "data_results.xlsx"))

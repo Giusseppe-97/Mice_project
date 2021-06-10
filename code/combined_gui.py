@@ -212,10 +212,10 @@ class Application(tk.Tk):
         global filepath2
         if len(self.textbox2.get()) != 0:
             self.textbox2.delete(0, 'end')
-        filepath2 = askdirectory()
-        if not filepath2:
-            filepath2 = "results/2021_monthly_results/plots_per_month"
-        self.textbox2.insert(tk.END, filepath2)
+        self.filepath2 = askdirectory()
+        if not self.filepath2:
+            self.filepath2 = "results/2021_monthly_results/plots_per_month"
+        self.textbox2.insert(tk.END, self.filepath2)
 
     def display_plot(self):
         """plot function is created for plotting the graph in tkinter window
@@ -384,7 +384,7 @@ class Application(tk.Tk):
         else:
             self.plot_name = str(self.init_month) + "_histogram"
 
-        filepath_hist_plot = str(filepath2) + "/" + \
+        filepath_hist_plot = str(self.filepath2) + "/" + \
             str(self.plot_name) + ".png"
         hist_plot = fig.savefig(filepath_hist_plot)
 
@@ -433,16 +433,6 @@ class Application(tk.Tk):
         plt.suptitle('NUMBER OF MICE VS AGE',
                      horizontalalignment='center', fontweight="bold", fontsize=20)
 
-        if self.init_month != self.final_month:
-            self.plot_4_name = str(self.init_month) + \
-                "-" + str(self.final_month)
-        else:
-            self.plot_4_name = str(self.init_month)
-
-        self.filepath_4_plot = str(filepath2) + "/" + \
-            str(self.plot_4_name)+".png"
-        self.hist_4_plot = plt.savefig(self.filepath_4_plot)
-
         return fig, axs
 
 class FolderManager:
@@ -452,12 +442,25 @@ class FolderManager:
     :param project_name: name of the project for the FolderManager agent.
     """
 
-    def __init__(self):
+    def __init__(self, app_object):
+        self.app_object = app_object
         self.current_datetime = dt.now()
         self.get_current_important_values()
         self.generate_folder_paths()
         self.create_folders()
+        self.save_image()
         # self.create_excel_workbook_weeks()
+
+    def save_image(self):
+        if self.app_object.init_month != self.app_object.final_month:
+            self.plot_4_name = str(self.app_object.init_month) + \
+                "-" + str(self.app_object.final_month)
+        else:
+            self.plot_4_name = str(self.app_object.init_month)
+
+        self.filepath_4_plot = str(self.app_object.filepath2) + "/" + \
+            str(self.plot_4_name)+".png"
+        self.hist_4_plot = plt.savefig(self.filepath_4_plot)
 
     def get_current_important_values(self):
         self.year = self.current_datetime.strftime("%Y")
@@ -499,15 +502,15 @@ class ExcelDevelopement:
 
     def __init__(self, app_object):
 
+        self.fm = FolderManager(app_object)
         self.app_object = app_object
-        self.fm = FolderManager()
 
         self.create_excel_workbook_months()
 
     def create_excel_workbook_months(self):
 
         d2 = self.app_object.d2
-        plot_name_four = str(self.app_object.plot_4_name)
+        plot_name_four = str(self.fm.plot_4_name)
         p = "results/2021_monthly_results/plots_per_month/"+ plot_name_four + ".png"
 
         wb = xlsxwriter.Workbook("{}\\{}".format(

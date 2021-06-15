@@ -118,7 +118,7 @@ class Application(tk.Tk):
         self.textbox3 = ttk.Entry(self.mainFrame1, width=20)
         self.textbox4 = ttk.Entry(self.mainFrame1, width=20)
 
-        # Create and inicialize buttons
+        # Create and initialize buttons
         self.button1 = ttk.Button(
             self.mainFrame1, text="Select", command=lambda: [self.open_excel_file_location()]
         )
@@ -128,11 +128,11 @@ class Application(tk.Tk):
         self.button3 = ttk.Checkbutton(
             self.mainFrame1, text="Run", style='ToggleButton', command=self.display_plot
         )
-        self.button5 = ttk.Button(
-            self, text="Start date", command=self.grab_start_date
-        )
         self.button4 = ttk.Button(
             self, text="End date", command=self.grab_end_date
+        )
+        self.button5 = ttk.Button(
+            self, text="Start date", command=self.grab_start_date
         )
         self.button_quit = ttk.Button(
             master=self, text="Quit", command=self.quit
@@ -156,7 +156,7 @@ class Application(tk.Tk):
         self.textbox4.insert(tk.END, self.cal.selection_get())
         self.final_month = self.cal.selection_get().strftime("%B")
 
-# pack and reset button not placed yet, just packed
+# quit and reset button not placed yet, just packed
 
     def pack_all(self):
 
@@ -176,8 +176,8 @@ class Application(tk.Tk):
 
         self.button1.place(x=900, y=70, height=40, width=120)
         self.button2.place(x=900, y=140, height=40, width=120)
-        self.button3.place(x=1090, y=70, height=60, width=120)
-        self.button_reset.place(x=1090, y = 140)
+        self.button3.place(x=1090, y=70, height=50, width=120)
+        self.button_reset.place(x=1090, y = 140, height=40, width=120)
         self.button5.place(x=1450, y=70, height=40)
         self.button4.place(x=1450, y=140, height=40)
         self.button_quit.pack(side=tk.BOTTOM, pady=10)
@@ -200,7 +200,7 @@ class Application(tk.Tk):
             "xlsx Files", "*.xlsx"), ("csv Files", "*.csv"), ("All Files", "*.*")])
 
         if not filepath1:
-            filepath1 = "../data/Mice_table.xlsx"
+            filepath1 = "../data/R403Q SoftMouse Export.xlsx"
         with open(filepath1, "r"):
             self.textbox1.insert(tk.END, filepath1)
 
@@ -376,17 +376,8 @@ class Application(tk.Tk):
         f.xaxis.set_major_locator(MaxNLocator(nbins=len(self.listy)))
         f.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-        f.legend(['M_WT', 'F_WT', 'M_HET', 'F_HET'])
+        f.legend(['Male Null', 'Female Null', 'Male HET', 'Female HET'])
 
-        if self.init_month != self.final_month:
-            self.plot_name = str(self.init_month) + "-" + \
-                str(self.final_month) + "_histogram"
-        else:
-            self.plot_name = str(self.init_month) + "_histogram"
-
-        filepath_hist_plot = str(self.filepath2) + "/" + \
-            str(self.plot_name) + ".png"
-        hist_plot = fig.savefig(filepath_hist_plot)
 
         return fig
 
@@ -435,6 +426,8 @@ class Application(tk.Tk):
 
         return fig, axs
 
+
+
 class FolderManager:
     """
     Enables the creation and management of folder structures for multipurpose 
@@ -450,6 +443,11 @@ class FolderManager:
         self.create_folders()
         self.save_image()
         # self.create_excel_workbook_weeks()
+    
+    def get_current_important_values(self):
+        self.year = self.current_datetime.strftime("%Y")
+        self.month = self.current_datetime.strftime("%B")
+        self.week = self.current_datetime.strftime("%W")
 
     def save_image(self):
         if self.app_object.init_month != self.app_object.final_month:
@@ -462,10 +460,15 @@ class FolderManager:
             str(self.plot_4_name)+".png"
         self.hist_4_plot = plt.savefig(self.filepath_4_plot)
 
-    def get_current_important_values(self):
-        self.year = self.current_datetime.strftime("%Y")
-        self.month = self.current_datetime.strftime("%B")
-        self.week = self.current_datetime.strftime("%W")
+        # if self.app_object.init_month != self.app_object.final_month:
+        #     self.plot_name = str(self.app_object.init_month) + "-" + \
+        #         str(self.app_object.final_month) + "_histogram"
+        # else:
+        #     self.plot_name = str(self.app_object.init_month) + "_histogram"
+
+        # filepath_hist_plot = str(self.app_object.filepath2) + "/" + \
+        #     str(self.plot_name) + ".png"
+        # hist_plot = plt.savefig(filepath_hist_plot)
 
     def generate_folder_paths(self):
         self.current_directory = os.path.abspath(os.path.dirname(__file__))
@@ -497,14 +500,12 @@ class FolderManager:
     def create_jpeg_from_figures(self):
         pass
 
-
 class ExcelDevelopement:
 
     def __init__(self, app_object):
 
         self.fm = FolderManager(app_object)
         self.app_object = app_object
-
         self.create_excel_workbook_months()
 
     def create_excel_workbook_months(self):
@@ -519,7 +520,7 @@ class ExcelDevelopement:
             {"bold": True, "align": "center", "border": True})
         center_border = wb.add_format({"align": "center", "border": True})
 
-        ws = wb.add_worksheet("{}".format(self.fm.month))
+        ws = wb.add_worksheet("{}".format(self.fm.plot_4_name))
 
         chart_names = ['Male Null(-) ', 'Female Null(-) ',
                        'Male R403Q(+/-)', 'Female R403Q(+/-)']
@@ -576,6 +577,7 @@ if __name__ == "__main__":
     app.iconbitmap(r'../docs/mickey.ico')
     app.mainloop()
     ed = ExcelDevelopement(app)
+    
 
 
 

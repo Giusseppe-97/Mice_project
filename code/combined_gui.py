@@ -36,8 +36,9 @@ import datetime
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import openpyxl
+from openpyxl import load_workbook
 import xlsxwriter
-
+from xlrd import open_workbook
 # from PIL import ImageTk, Image
 
 
@@ -52,7 +53,7 @@ class Application(tk.Tk):
         """
 
         super().__init__(*args, **kwargs)
-    
+
         # Set style of the GUI
         self.tk.call('source', r'../docs/style/azure.tcl')
         ttk.Style().theme_use('azure')
@@ -71,7 +72,6 @@ class Application(tk.Tk):
         self.configure_basic_tk_properties()
         self.pack_all()
 
-# reset button not programmed yet
     def configure_basic_tk_properties(self):
         """This method configures the basic tkinter esthetic properties for the GUI
         """
@@ -93,7 +93,6 @@ class Application(tk.Tk):
             self.mainFrame2, text="HISTOGRAM DISPLAY PREVIEW", foreground="white",
             background="#120597").place(y=0, width=1920
                                         )
-
         # Create input and output lables
         self.label3 = ttk.Label(
             self.mainFrame1, text="Input: ", background="white"
@@ -123,7 +122,7 @@ class Application(tk.Tk):
             self.mainFrame1, text="Select", command=lambda: [self.open_excel_file_location()]
         )
         self.button2 = ttk.Button(
-            self.mainFrame1, text="Save ", command=lambda: [self.save_results()]
+            self.mainFrame1, text="Save", command=lambda: [self.save_results()]
         )
         self.button3 = ttk.Checkbutton(
             self.mainFrame1, text="Run", style='ToggleButton', command=self.display_plot
@@ -134,11 +133,12 @@ class Application(tk.Tk):
         self.button5 = ttk.Button(
             self, text="Start date", command=self.grab_start_date
         )
+        self.button_reset = ttk.Button(
+            master=self, text="Reset", command=self.reset_app
+        )
         self.button_quit = ttk.Button(
             master=self, text="Quit", command=self.quit
         )
-        self.button_reset = ttk.Button(
-            master=self, text="Reset", command=self.reset_app)
 
         # Create Canvas (where Histograms are going to be placed as matplotlib Figures)
         self.canvas01 = tk.Canvas(self.mainFrame2)
@@ -177,7 +177,7 @@ class Application(tk.Tk):
         self.button1.place(x=900, y=70, height=40, width=120)
         self.button2.place(x=900, y=140, height=40, width=120)
         self.button3.place(x=1090, y=70, height=50, width=120)
-        self.button_reset.place(x=1090, y = 140, height=40, width=120)
+        self.button_reset.place(x=1090, y=140, height=40, width=120)
         self.button5.place(x=1450, y=70, height=40)
         self.button4.place(x=1450, y=140, height=40)
         self.button_quit.pack(side=tk.BOTTOM, pady=10)
@@ -188,7 +188,7 @@ class Application(tk.Tk):
         self.canvas01.place(x=100, y=40, height=600, width=800)
         self.canvas02.place(x=1000, y=40, height=600, width=800)
 
-# Data tale path reproducible to other devices, not only for this one
+# Data open path reproducible to other devices, not only for this one
 
     def open_excel_file_location(self):
         """Open the File Explorer to select desired excel file
@@ -217,6 +217,217 @@ class Application(tk.Tk):
             self.filepath2 = "results/2021_monthly_results/plots_per_month"
         self.textbox2.insert(tk.END, self.filepath2)
 
+    def import_excel_file(self):
+        self.df = pd.read_excel(filepath1, sheet_name="Mouse List")
+
+    def obtain_data_from_excel(self):
+        self.import_excel_file()
+
+# I could obtain the date in the correct format from the begining
+        # Change date format to compare with excel
+        self.init_date = self.textbox3.get()
+        self.init_date[::-1]
+        self.final_date = self.textbox4.get()
+        self.final_date[::-1]
+
+        # Limit data from the excel file for the chosen period of time
+        n_df = self.df[(self.init_date <= self.df.Date_of_birth) &
+                       (self.df.Date_of_birth <= self.final_date)]
+
+        # print(n_df)
+
+        # Failed attempt to make the code underneath better
+
+        # lage = []
+        # for index, row in n_df.iterrows():
+        #     a1 = str(self.final_date)
+        #     aa = dt.strptime(a1, "%Y-%m-%d")
+        #     b1 = str(n_df['Date_of_birth'])
+        #     b1 = b1[5:15]
+        #     print(b1)
+        #     bb = dt.strptime(b1, "%Y-%m-%d")
+        #     bd = abs((bb - aa).days)
+        #     age_in_weeks = bd//7
+        #     lage.append(age_in_weeks)
+        # print(lage)
+
+        # List of ages of the different type of mice 
+        birth_MWt = []
+        birth_FWt = []
+        birth_MHet = []
+        birth_FHet = []
+
+# ***
+# My BEST idea so far is to reorganize this code. If I calculate the birthday of all of the dataframe
+# I can then just grab the dataframe of 'sex', 'Genotype' and 'status' and they will have the birthdays already
+# ***
+
+# Needs optimization. Too many lines for a simple part of the code
+# There are 4 loops that are doing the same thing for example. There should be a way to reduce this
+        # Selects data from the excel file for sex, genotype and status (only mice that are alive)
+        df_MWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
+            n_df['Genotype'] == 'Null(-)') & (n_df['Status'] == 'Alive')])
+
+        for index, rows in df_MWt.iterrows():
+            a = str(n_df['Date_of_birth'][index])
+            birth_MWt.append(a[:10])
+
+        df_FWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
+            n_df['Genotype'] == 'Null(-)') & (n_df['Status'] == 'Alive')])
+
+        for index, rows in df_FWt.iterrows():
+            a = str(n_df['Date_of_birth'][index])
+            birth_FWt.append(a[:10])
+
+        df_MHet = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
+            n_df['Genotype'] == 'R403Q(+/-)') & (n_df['Status'] == 'Alive')])
+
+        for index, rows in df_MHet.iterrows():
+            a = str(n_df['Date_of_birth'][index])
+            birth_MHet.append(a[:10])
+
+        df_FHet = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
+            n_df['Genotype'] == 'R403Q(+/-)') & (n_df['Status'] == 'Alive')])
+
+        for index, rows in df_FHet.iterrows():
+            a = str(n_df['Date_of_birth'][index])
+            birth_FHet.append(a[:10])
+
+        dfappended = df_FHet.append([df_FWt,df_MHet, df_MWt], ignore_index=True)
+        self.dfreduced = dfappended[['Sex', 'Genotype', 'Status','Date_of_birth']]
+
+        birthday = [ birth_FHet, birth_FWt, birth_MHet, birth_MWt]
+
+        # Using the dates entered by the user to calculate de age of the mice
+
+        self.d2 = []
+        dd2 = []
+        
+        for i in range(len(birthday)):
+            age_in_weeks = 0
+            d1 = []
+            j = 0
+            for j in range(len(birthday[i])):
+
+                a1 = str(self.final_date)
+                aa = dt.strptime(a1, "%Y-%m-%d")
+                b1 = str(birthday[i][j])
+                bb = dt.strptime(b1, "%Y-%m-%d")
+                bd = abs((bb - aa).days)
+                age_in_weeks = bd//7
+
+                dd2.append(age_in_weeks)
+                d1.append(age_in_weeks)
+                j = j + 1
+            d1.sort(reverse=True)
+            self.d2.append(d1)
+        print(self.d2)
+        print(dd2)
+
+        print(self.dfreduced['Date_of_birth'])
+        
+        # for element in range(len(self.d2)):
+        #     for ele in range(len(self.d2[element])):
+        #         dd2.append(self.d2[element][ele])
+
+        # print(dd2)
+
+        # Adding a column in excel with the calculated age
+        self.dfreduced['Calculated Age'] = dd2
+
+        # Setting parameters of length and size for the matplotlib plots
+        self.d3 = []
+        self.d4 = []
+
+        es = 0
+        for es in range(4):
+            if self.d2[es] != []:
+                self.d3.append(self.d2[es][0])
+            else:
+                self.d4.append(es)
+
+        # Colors
+        self.colors = sns.color_palette("rocket", 4)
+        self.listy = []
+
+        if len(self.d4) == 4:
+            self.b = 5
+        else:
+            self.b = int(max(self.d3))+1
+
+        r = 0
+        for i in range(self.b+1):
+            self.listy.append(r)
+            r = r+1
+
+    def plot_individual_hist(self):
+
+        self.obtain_data_from_excel()
+
+        # Plot
+        fig = plt.figure(figsize=(5, 5), dpi=100)
+        f = fig.gca()
+
+        f.hist(self.d2, bins=self.listy, color=self.colors)
+        f.set_xlabel(r'Age (weeks)', fontsize=15)
+        f.set_ylabel(r'Number of mice', fontsize=17)
+        f.set_title('NUMBER OF MICE VS AGE',
+                    horizontalalignment='center', fontweight="bold", fontsize=20)
+
+        f.xaxis.set_major_locator(MaxNLocator(nbins=len(self.listy)))
+        f.xaxis.set_major_locator(MaxNLocator(integer=True))
+
+        f.legend(['Male Null(-)', 'Female Null(-)', 'Male R403Q(+/-)', 'Female R403Q(+/-)'])
+
+        return fig
+
+    def plot_4_hist(self):
+
+        self.obtain_data_from_excel()
+
+        # Plot
+        fig, axs = plt.subplots(2, 2, figsize=(
+            8, 8), sharey=True,  tight_layout=True)
+
+        # I need to garantee its the same x axis quantity and integers
+        axs[0, 0].hist(self.d2[0], bins=self.listy, color=self.colors[0],
+                       label='Male Null(-)', edgecolor='white')
+
+        axs[0, 1].hist(self.d2[1], bins=self.listy, color=self.colors[1],
+                       label='Female Null(-)', edgecolor='white')
+
+        axs[1, 0].hist(self.d2[2], bins=self.listy, color=self.colors[2],
+                       label='Male R403Q(+/-)', edgecolor='white')
+
+        axs[1, 1].hist(self.d2[3], bins=self.listy, color=self.colors[3],
+                       label='Female R403Q(+/-)', edgecolor='white')
+
+    # There must be a better way to write these lines in a shorter way
+        axs[0, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
+        axs[0, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
+        axs[1, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
+        axs[1, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
+        axs[0, 0].yaxis.set_major_locator(MaxNLocator(integer=True))
+        axs[0, 1].yaxis.set_major_locator(MaxNLocator(integer=True))
+        axs[1, 0].yaxis.set_major_locator(MaxNLocator(integer=True))
+        axs[1, 1].yaxis.set_major_locator(MaxNLocator(integer=True))
+
+        # plt.subplots_adjust(hspace=0)
+        axs[1, 0].set_xlabel(r'Age (weeks)', fontsize=15)
+        axs[1, 1].set_xlabel(r'Age (weeks)', fontsize=15)
+        axs[0, 0].set_ylabel(r'Number of mice', fontsize=17,
+                             horizontalalignment='right')
+
+        axs[0, 0].legend()
+        axs[0, 1].legend()
+        axs[1, 0].legend()
+        axs[1, 1].legend()
+
+        plt.suptitle('NUMBER OF MICE VS AGE',
+                     horizontalalignment='center', fontweight="bold", fontsize=20)
+
+        return fig, axs
+
     def display_plot(self):
         """plot function is created for plotting the graph in tkinter window
         """
@@ -242,7 +453,8 @@ class Application(tk.Tk):
         self.toolbar1.place(x=400, y=900)
         self.toolbar2.place(x=1300, y=900)
 
-# better if they where placed # pack the widgetsinside the Tkinter canvas
+# better if they where placed. 
+        # pack the widgetsinside the Tkinter canvas
         self.canvas1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.canvas2.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
@@ -253,180 +465,6 @@ class Application(tk.Tk):
         self.toolbar2.destroy()
         # self.textbox3.clear()
         # self.textbox4.clear()
-
-    def import_excel_file(self):
-        self.df = pd.read_excel(filepath1, sheet_name="Mouse List")
-        print(self.df)
-
-    def obtain_data_from_excel(self):
-        self.import_excel_file()
-
-# I could obtain the date in the correct format from the begining
-        # Change date format to compare with excel
-        self.init_date = self.textbox3.get()
-        self.init_date[::-1]
-        self.final_date = self.textbox4.get()
-        self.final_date[::-1]
-
-        # Limit data from the excel file for the chosen period of time
-        n_df = self.df[(self.init_date <= self.df.Date_of_birth) &
-                       (self.df.Date_of_birth <= self.final_date)]
-
-        # Selects data from the excel file for sex, genotype and status (only mice that are alive)
-        df_MWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
-            n_df['Genotype'] == 'Null(-)') & (n_df['Status'] == 'Alive')])
-
-        birth_MWt = []
-        birth_FWt = []
-        birth_MHet = []
-        birth_FHet = []
-
-        for index, rows in df_MWt.iterrows():
-            a = str(n_df['Date_of_birth'][index])
-            birth_MWt.append(a[:10])
-        print(len(birth_MWt))
-
-# There are 4 loops that are doing the same thing. There should be a way to reduce this
-        df_FWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
-            n_df['Genotype'] == 'Null(-)') & (n_df['Status'] == 'Alive')])
-
-        for index, rows in df_FWt.iterrows():
-            a = str(n_df['Date_of_birth'][index])
-            birth_FWt.append(a[:10])
-
-        df_MHet = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
-            n_df['Genotype'] == 'R403Q(+/-)') & (n_df['Status'] == 'Alive')])
-
-        for index, rows in df_MHet.iterrows():
-            a = str(n_df['Date_of_birth'][index])
-            birth_MHet.append(a[:10])
-
-        df_FHet = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Female') & (
-            n_df['Genotype'] == 'R403Q(+/-)') & (n_df['Status'] == 'Alive')])
-
-        for index, rows in df_FHet.iterrows():
-            a = str(n_df['Date_of_birth'][index])
-            birth_FHet.append(a[:10])
-
-        birthday = [birth_MWt, birth_FWt, birth_MHet, birth_FHet]
-        # total_data = [df_MWt, df_FWt, df_MHet, df_FHet]
-        print(n_df)
-
-        self.d2 = []
-
-        for i in range(len(birthday)):
-            age_in_weeks = 0
-            d1 = []
-            j = 0
-            for j in range(len(birthday[i])):
-
-                a1 = str(self.final_date)
-                aa = dt.strptime(a1, "%Y-%m-%d")
-                b1 = str(birthday[i][j])
-                bb = dt.strptime(b1, "%Y-%m-%d")
-                bd = abs((bb - aa).days)
-                age_in_weeks = bd//7
-
-                d1.append(age_in_weeks)
-                j = j + 1
-            d1.sort(reverse=True)
-            self.d2.append(d1)
-        print(self.d2)
-
-        self.d3 = []
-        self.d4 = []
-
-        es = 0
-        for es in range(4):
-            if self.d2[es] != []:
-                self.d3.append(self.d2[es][0])
-            else:
-                self.d4.append(es)
-
-        # Colors
-        self.colors = sns.color_palette("mako", 4)
-        self.listy = []
-
-        if len(self.d4) == 4:
-            self.b = 5
-        else:
-            self.b = int(max(self.d3))+1
-
-        r = 0
-
-        for i in range(self.b+1):
-            self.listy.append(r)
-            r = r+1
-
-    def plot_individual_hist(self):
-
-        self.obtain_data_from_excel()
-
-        # Plot
-
-        fig = plt.figure(figsize=(5, 5), dpi=100)
-        f = fig.gca()
-
-        f.hist(self.d2, bins=self.listy, color=self.colors)
-        f.set_xlabel(r'Age (weeks)', fontsize=15)
-        f.set_ylabel(r'Number of mice', fontsize=15)
-        f.set_title('NUMBER OF MICE VS AGE',
-                    horizontalalignment='center', fontweight="bold", fontsize=20)
-
-        f.xaxis.set_major_locator(MaxNLocator(nbins=len(self.listy)))
-        f.xaxis.set_major_locator(MaxNLocator(integer=True))
-
-        f.legend(['Male Null', 'Female Null', 'Male HET', 'Female HET'])
-
-
-        return fig
-
-    def plot_4_hist(self):
-
-        self.obtain_data_from_excel()
-        # Plot
-        fig, axs = plt.subplots(2, 2, figsize=(
-            8, 8), sharey=True,  tight_layout=True)
-
-        # I need to garantee its the same x axis quantity and integers
-        axs[0, 0].hist(self.d2[0], bins=self.listy, color=self.colors[0],
-                       label='Male Null', edgecolor='white')
-
-        axs[0, 1].hist(self.d2[1], bins=self.listy, color=self.colors[1],
-                       label='Female Null', edgecolor='white')
-
-        axs[1, 0].hist(self.d2[2], bins=self.listy, color=self.colors[2],
-                       label='Male R403Q(+/-)', edgecolor='white')
-
-        axs[1, 1].hist(self.d2[3], bins=self.listy, color=self.colors[3],
-                       label='Female R403Q(+/-)', edgecolor='white')
-
-        axs[0, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
-        axs[0, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
-        axs[1, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
-        axs[1, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
-        axs[0, 0].yaxis.set_major_locator(MaxNLocator(integer=True))
-        axs[0, 1].yaxis.set_major_locator(MaxNLocator(integer=True))
-        axs[1, 0].yaxis.set_major_locator(MaxNLocator(integer=True))
-        axs[1, 1].yaxis.set_major_locator(MaxNLocator(integer=True))
-
-        # plt.subplots_adjust(hspace=0)
-        axs[1, 0].set_xlabel(r'Age (weeks)', fontsize=15)
-        axs[1, 1].set_xlabel(r'Age (weeks)', fontsize=15)
-        axs[0, 0].set_ylabel(r'Number of mice', fontsize=15,
-                             horizontalalignment='right')
-
-        axs[0, 0].legend()
-        axs[0, 1].legend()
-        axs[1, 0].legend()
-        axs[1, 1].legend()
-
-        plt.suptitle('NUMBER OF MICE VS AGE',
-                     horizontalalignment='center', fontweight="bold", fontsize=20)
-
-        return fig, axs
-
-
 
 class FolderManager:
     """
@@ -443,7 +481,7 @@ class FolderManager:
         self.create_folders()
         self.save_image()
         # self.create_excel_workbook_weeks()
-    
+
     def get_current_important_values(self):
         self.year = self.current_datetime.strftime("%Y")
         self.month = self.current_datetime.strftime("%B")
@@ -459,6 +497,8 @@ class FolderManager:
         self.filepath_4_plot = str(self.app_object.filepath2) + "/" + \
             str(self.plot_4_name)+".png"
         self.hist_4_plot = plt.savefig(self.filepath_4_plot)
+
+    # def save_image_2(self):
 
         # if self.app_object.init_month != self.app_object.final_month:
         #     self.plot_name = str(self.app_object.init_month) + "-" + \
@@ -500,6 +540,7 @@ class FolderManager:
     def create_jpeg_from_figures(self):
         pass
 
+
 class ExcelDevelopement:
 
     def __init__(self, app_object):
@@ -511,19 +552,34 @@ class ExcelDevelopement:
     def create_excel_workbook_months(self):
 
         d2 = self.app_object.d2
+        dfreduced = self.app_object.dfreduced
+        # df = self.app_object.df
         plot_name_four = str(self.fm.plot_4_name)
-        p = "results/2021_monthly_results/plots_per_month/"+ plot_name_four + ".png"
+        path_image = "results/2021_monthly_results/plots_per_month/" + plot_name_four + ".png"
+        path_workbook = str(self.fm.year) + "_data_results.xlsx"
+        path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
+
+        if not os.path.isfile(path_workbook_data):
+            print('old file')
+            dfreduced.to_excel(path_workbook_data, sheet_name=self.fm.plot_4_name, index = False)
+
+        writer = pd.ExcelWriter(path_workbook_data, engine = 'openpyxl')
+        writer.book = load_workbook(path_workbook_data)
+        writer.book.create_sheet("{}".format(plot_name_four))
+        writer.save()
+        writer.close()
 
         wb = xlsxwriter.Workbook("{}\\{}".format(
-            self.fm.get_path_for_results(), "data_results.xlsx"))
+            self.fm.get_path_for_results(), path_workbook))
         center_bold_border = wb.add_format(
             {"bold": True, "align": "center", "border": True})
         center_border = wb.add_format({"align": "center", "border": True})
 
-        ws = wb.add_worksheet("{}".format(self.fm.plot_4_name))
+        ws = wb.add_worksheet("{}".format(plot_name_four))
 
         chart_names = ['Male Null(-) ', 'Female Null(-) ',
                        'Male R403Q(+/-)', 'Female R403Q(+/-)']
+
 
         row, col = 0, 0
         for chart in range(len(chart_names)):
@@ -542,7 +598,6 @@ class ExcelDevelopement:
             print(d2[chart])
             dic_mice = {}
 
-
             # Count mice based on ages and adding to dictionary
             for i in range(len(d2[chart])):
                 if str(d2[chart][i]) in dic_mice:
@@ -552,22 +607,21 @@ class ExcelDevelopement:
                     dic_mice["{}".format(d2[chart][i])] = 1
 
             print(dic_mice)
-            
-            # write data from dictionary of ages and number of mice  
+
+            # write data from dictionary of ages and number of mice
             for age in dic_mice:
                 ws.write(row, col, "{}".format(age), center_border)
                 ws.write(row, col+1, "{}".format(dic_mice[age]), center_border)
                 row += 1
-      
+
             # Move to next chart
             row = 0
             col += 3
-        # Insert the image created for the specific 
+        # Insert the image created for the specific
 
-        ws.insert_image(row, col, p, {'x_scale': 0.65, 'y_scale': 0.65})
-
+        ws.insert_image(row, col, path_image, {
+                        'x_scale': 0.65, 'y_scale': 0.65})
         wb.close()
-        
 
 
 if __name__ == "__main__":
@@ -577,7 +631,3 @@ if __name__ == "__main__":
     app.iconbitmap(r'../docs/mickey.ico')
     app.mainloop()
     ed = ExcelDevelopement(app)
-    
-
-
-

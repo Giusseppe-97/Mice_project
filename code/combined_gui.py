@@ -55,7 +55,7 @@ class Application(tk.Tk):
         super().__init__(*args, **kwargs)
 
         # Set style of the GUI
-        self.tk.call('source', r'../docs/style/azure.tcl')
+        self.tk.call('source', r'../style/azure.tcl')
         ttk.Style().theme_use('azure')
 
         # Create Main Frames

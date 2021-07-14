@@ -2,7 +2,7 @@ remote_theme: pmarsceill/just-the-docs
 
 # Auxiliary links for the upper right navigation.
 aux_links:
-  "Mice_porject":
+  "TheMiceCounter":
     - http://giusseppe-97.github.io/Mice_project/  
   
 
@@ -17,4 +17,4 @@ aux_links:
 footer_content: "Written by the Campbell Muscle Lab"
 
 # This is the title of the website
-title: "Mice_project"
+title: "TheMiceCounter"

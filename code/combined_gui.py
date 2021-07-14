@@ -39,7 +39,10 @@ import openpyxl
 from openpyxl import load_workbook
 import xlsxwriter
 from xlrd import open_workbook
+import nicexcel as nl
 # from PIL import ImageTk, Image
+
+# from New_excel_code import crear_excel_de_proyectos
 
 
 class Application(tk.Tk):
@@ -333,7 +336,7 @@ class Application(tk.Tk):
         # print(dd2)
 
         # Adding a column in excel with the calculated age
-        self.dfreduced['Calculated Age'] = dd2
+        self.dfreduced.loc[:,'Calculated Age'] = dd2
 
         # Setting parameters of length and size for the matplotlib plots
         self.d3 = []
@@ -458,6 +461,91 @@ class Application(tk.Tk):
         self.canvas1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.canvas2.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
+        self.crear_excel_de_proyectos()
+
+    # def create_excel_workbook_months(self):
+        # I need a function to create and saves excel sheets with the gui info
+    def crear_excel_de_proyectos(self):
+        # From folderManager I have a folder where to save the info
+        self.fm = FolderManager(self)
+        path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
+        plot_name_fig_four = str(self.fm.plot_4_name)
+        path_image = "results/2021_monthly_results/plots_per_month/" + plot_name_fig_four + ".png"
+
+        # I should do an if statement (path exist) and if statement (excel object exists): 
+        # print('old file')
+
+        book = load_workbook("data_results_new.xlsx")
+        op_writer = pd.ExcelWriter("data_results_new.xlsx", engine = 'openpyxl')
+        op_writer.book = book
+
+        op_writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+            
+        # loop to write the worksheet try except
+
+        self.dfreduced.to_excel(op_writer, plot_name_fig_four, index = False)
+
+        op_writer.save()
+        op_writer.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        # book_2 = load_workbook("data_results_new.xlsx")
+        # writer = pd.ExcelWriter("data_results_new.xlsx", engine = 'openpyxl')
+
+        # writer.book = book_2
+        # if plot_name_four not in op_writer.sheets:
+        #     ws = op_writer.book.create_sheet(plot_name_four)
+        
+        # self.dfreduced.to_excel(writer, plot_name_four, index = False)
+        
+        # nl.to_excel( self.dfreduced, filename= "data_results.xlsx", sheet_name=plot_name_four, index = False)
+
+#         else:
+
+#             print('new file')
+#             wb = Workbook( "{}\\{}".format( self.fm.directory_per_month,'{}.xlsx'.format("data_results")  ) )
+#             ws = wb.active
+#             ws.title = "New Title"
+#             ws1 = wb.create_sheet("Mysheet") # insert at the end (default)
+#             ws1 =  wb["New Title"]
+#             print(wb.sheetnames)
+#             # for sheet in wb:
+# # ...             if 
+
+
+        
+
+        # self.fm = FolderManager(self)
+        # path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
+        # nl.to_excel(self.dfreduced, path_workbook_data, sheet_name=self.fm.plot_4_name, index = False)
+      
+
     def reset_app(self):
         self.canvas1.get_tk_widget().destroy()
         self.canvas2.get_tk_widget().destroy()
@@ -497,6 +585,9 @@ class FolderManager:
         self.filepath_4_plot = str(self.app_object.filepath2) + "/" + \
             str(self.plot_4_name)+".png"
         self.hist_4_plot = plt.savefig(self.filepath_4_plot)
+        # self.filepath_4_plot = str(self.app_object.filepath2) + "/" + \
+        #     str(self.plot_4_name)+".png"
+        # self.hist_4_plot = plt.savefig(self.filepath_4_plot)
 
     # def save_image_2(self):
 
@@ -541,87 +632,90 @@ class FolderManager:
         pass
 
 
-class ExcelDevelopement:
+# class ExcelDevelopement:
 
-    def __init__(self, app_object):
+#     def __init__(self, app_object):
 
-        self.fm = FolderManager(app_object)
-        self.app_object = app_object
-        self.create_excel_workbook_months()
+#         self.fm = FolderManager(app_object)
+#         self.app_object = app_object
+#         self.create_excel_workbook_months()
 
-    def create_excel_workbook_months(self):
+#     def create_excel_workbook_months(self):
 
-        d2 = self.app_object.d2
-        dfreduced = self.app_object.dfreduced
-        # df = self.app_object.df
-        plot_name_four = str(self.fm.plot_4_name)
-        path_image = "results/2021_monthly_results/plots_per_month/" + plot_name_four + ".png"
-        path_workbook = str(self.fm.year) + "_data_results.xlsx"
-        path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
-
-        if not os.path.isfile(path_workbook_data):
-            print('old file')
-            dfreduced.to_excel(path_workbook_data, sheet_name=self.fm.plot_4_name, index = False)
-
-        writer = pd.ExcelWriter(path_workbook_data, engine = 'openpyxl')
-        writer.book = load_workbook(path_workbook_data)
-        writer.book.create_sheet("{}".format(plot_name_four))
-        writer.save()
-        writer.close()
-
-        wb = xlsxwriter.Workbook("{}\\{}".format(
-            self.fm.get_path_for_results(), path_workbook))
-        center_bold_border = wb.add_format(
-            {"bold": True, "align": "center", "border": True})
-        center_border = wb.add_format({"align": "center", "border": True})
-
-        ws = wb.add_worksheet("{}".format(plot_name_four))
-
-        chart_names = ['Male Null(-) ', 'Female Null(-) ',
-                       'Male R403Q(+/-)', 'Female R403Q(+/-)']
+#         d2 = self.app_object.d2
+#         dfreduced = self.app_object.dfreduced
+#         # df = self.app_object.df
+#         plot_name_four = str(self.fm.plot_4_name)
+#         path_image = "results/2021_monthly_results/plots_per_month/" + plot_name_four + ".png"
+#         path_workbook = str(self.fm.year) + "_data_results.xlsx"
+#         path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
+#         nl.to_excel(dfreduced,path_workbook_data, sheet_name=self.fm.plot_4_name, index = False)
 
 
-        row, col = 0, 0
-        for chart in range(len(chart_names)):
+# Need to clarify the date as a excel sheet
+        
+        # if not os.path.isfile(path_workbook_data):
+        # print('old file')
 
-            # Add charts title
-            ws.merge_range(row, col, row, col+1,
-                           "{}".format(chart_names[chart]), center_bold_border)
+        # writer = pd.ExcelWriter(path_workbook_data, engine = 'openpyxl')
+        # writer.book = load_workbook(path_workbook_data)
+        # writer.book.create_sheet("{}".format(plot_name_four))
+        # writer.save()
+        # writer.close()
 
-            # Add charts subtitles
-            row += 1
-            ws.write(row, col, "Age", center_border)
-            ws.write(row, col+1, "mice #", center_border)
+        # wb = xlsxwriter.Workbook("{}\\{}".format(
+        #     self.fm.get_path_for_results(), path_workbook))
+        # center_bold_border = wb.add_format(
+        #     {"bold": True, "align": "center", "border": True})
+        # center_border = wb.add_format({"align": "center", "border": True})
 
-            # Add charts data
-            row += 1
-            print(d2[chart])
-            dic_mice = {}
+        # ws = wb.add_worksheet("{}".format(plot_name_four))
 
-            # Count mice based on ages and adding to dictionary
-            for i in range(len(d2[chart])):
-                if str(d2[chart][i]) in dic_mice:
-                    dic_mice["{}".format(
-                        d2[chart][i])] = dic_mice["{}".format(d2[chart][i])]+1
-                else:
-                    dic_mice["{}".format(d2[chart][i])] = 1
+        # chart_names = ['Male Null(-) ', 'Female Null(-) ',
+        #                'Male R403Q(+/-)', 'Female R403Q(+/-)']
 
-            print(dic_mice)
 
-            # write data from dictionary of ages and number of mice
-            for age in dic_mice:
-                ws.write(row, col, "{}".format(age), center_border)
-                ws.write(row, col+1, "{}".format(dic_mice[age]), center_border)
-                row += 1
+        # row, col = 0, 0
+        # for chart in range(len(chart_names)):
 
-            # Move to next chart
-            row = 0
-            col += 3
-        # Insert the image created for the specific
+        #     # Add charts title
+        #     ws.merge_range(row, col, row, col+1,
+        #                    "{}".format(chart_names[chart]), center_bold_border)
 
-        ws.insert_image(row, col, path_image, {
-                        'x_scale': 0.65, 'y_scale': 0.65})
-        wb.close()
+        #     # Add charts subtitles
+        #     row += 1
+        #     ws.write(row, col, "Age", center_border)
+        #     ws.write(row, col+1, "mice #", center_border)
+
+        #     # Add charts data
+        #     row += 1
+        #     print(d2[chart])
+        #     dic_mice = {}
+
+        #     # Count mice based on ages and adding to dictionary
+        #     for i in range(len(d2[chart])):
+        #         if str(d2[chart][i]) in dic_mice:
+        #             dic_mice["{}".format(
+        #                 d2[chart][i])] = dic_mice["{}".format(d2[chart][i])]+1
+        #         else:
+        #             dic_mice["{}".format(d2[chart][i])] = 1
+
+        #     print(dic_mice)
+
+        #     # write data from dictionary of ages and number of mice
+        #     for age in dic_mice:
+        #         ws.write(row, col, "{}".format(age), center_border)
+        #         ws.write(row, col+1, "{}".format(dic_mice[age]), center_border)
+        #         row += 1
+
+        #     # Move to next chart
+        #     row = 0
+        #     col += 3
+        # # Insert the image created for the specific
+
+        # ws.insert_image(row, col, path_image, {
+        #                 'x_scale': 0.65, 'y_scale': 0.65})
+        # wb.close()
 
 
 if __name__ == "__main__":
@@ -630,4 +724,4 @@ if __name__ == "__main__":
     app.resizable(True, False)
     app.iconbitmap(r'../docs/mickey.ico')
     app.mainloop()
-    ed = ExcelDevelopement(app)
+    # ed = ExcelDevelopement(app)

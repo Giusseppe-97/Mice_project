@@ -191,15 +191,20 @@ class Application(tk.Tk):
         global filepath1
         if len(self.textbox1.get()) != 0:
             self.textbox1.delete(0, 'end')
+            
         filepath1 = askopenfilename(filetypes=[(
             "xlsx Files", "*.xlsx"), ("csv Files", "*.csv"), ("All Files", "*.*")])
-
-        if not filepath1:
-            tk.messagebox.showwarning(title='No file selected.',
-                message='Please make sure a file has been chosen before running the program.')
-            filepath1 = "../data/R403Q SoftMouse Export.xlsx"
+        try:
             with open(filepath1, "r"):
                 self.textbox1.insert(tk.END, filepath1)
+        
+        except:
+            if not filepath1:
+                tk.messagebox.showwarning(title='No file selected.',
+                    message='Please make sure a file has been chosen before running the program.')
+                filepath1 = "../data/R403Q SoftMouse Export.xlsx"
+                with open(filepath1, "r"):
+                    self.textbox1.insert(tk.END, filepath1)
 
     def save_results(self):
         """Open the file Explorer to select desired location to save results

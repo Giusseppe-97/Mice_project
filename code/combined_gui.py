@@ -23,10 +23,9 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 import matplotlib.pyplot as plt
-
 from matplotlib.ticker import MaxNLocator
+
 import pandas as pd
-import numpy as np
 import seaborn as sns
 
 import os
@@ -35,14 +34,12 @@ import datetime
 
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.utils import get_column_letter
+from openpyxl.drawing.image import Image
 import openpyxl
 from openpyxl import load_workbook
-import xlsxwriter
-from xlrd import open_workbook
 import nicexcel as nl
 # from PIL import ImageTk, Image
-
-# from New_excel_code import crear_excel_de_proyectos
 
 
 class Application(tk.Tk):
@@ -78,16 +75,16 @@ class Application(tk.Tk):
     def configure_basic_tk_properties(self):
         """This method configures the basic tkinter esthetic properties for the GUI
         """
-        self.title("Mice GUI")
+        self.title("   Mice GUI")
 
         # Setting the main App in the center regardless to the window's size chosen by the user
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
-        # Setting a background for the main App (which is going to hold both frames)
+        # Setting a background for the main App which will be divided in 2 different Frames
         self.configure(bg="light blue")
 
-        # Create and place Lables for each Frame
+        # Creating and placing Lables for each Frame
         self.lable = tk.Label(
             self.mainFrame1, text="RUN DATA", foreground="white",
             background="#120597").place(x=0, width=1920
@@ -96,7 +93,8 @@ class Application(tk.Tk):
             self.mainFrame2, text="HISTOGRAM DISPLAY PREVIEW", foreground="white",
             background="#120597").place(y=0, width=1920
                                         )
-        # Create input and output lables
+
+        # Creating labels
         self.label3 = ttk.Label(
             self.mainFrame1, text="Input: ", background="white"
         )
@@ -104,8 +102,7 @@ class Application(tk.Tk):
             self.mainFrame1, text="Output:", background="white"
         )
         self.label5 = tk.Label(
-            self.mainFrame1, text="Select Date Interval: ",
-            font=("Arial bold", 11), background="white"
+            self.mainFrame1, text="Select Date Interval: ", background="white"
         )
         self.label6 = ttk.Label(
             self.mainFrame1, text="From:", background="white"
@@ -114,13 +111,13 @@ class Application(tk.Tk):
             self.mainFrame1, text="To:", background="white"
         )
 
-        # Create textboxes
+        # Creating textboxes
         self.textbox1 = ttk.Entry(self.mainFrame1, width=80)
         self.textbox2 = ttk.Entry(self.mainFrame1, width=80)
         self.textbox3 = ttk.Entry(self.mainFrame1, width=20)
         self.textbox4 = ttk.Entry(self.mainFrame1, width=20)
 
-        # Create and initialize buttons
+        # Creating and initializing buttons
         self.button1 = ttk.Button(
             self.mainFrame1, text="Select", command=lambda: [self.open_excel_file_location()]
         )
@@ -143,7 +140,7 @@ class Application(tk.Tk):
             master=self, text="Quit", command=self.quit
         )
 
-        # Create Canvas (where Histograms are going to be placed as matplotlib Figures)
+        # Creating Canvas (where Histograms are going to be placed as matplotlib Figures)
         self.canvas01 = tk.Canvas(self.mainFrame2)
         self.canvas02 = tk.Canvas(self.mainFrame2)
 
@@ -158,8 +155,6 @@ class Application(tk.Tk):
             self.textbox4.delete(0, 'end')
         self.textbox4.insert(tk.END, self.cal.selection_get())
         self.final_month = self.cal.selection_get().strftime("%B")
-
-# quit and reset button not placed yet, just packed
 
     def pack_all(self):
 
@@ -184,14 +179,11 @@ class Application(tk.Tk):
         self.button5.place(x=1450, y=70, height=40)
         self.button4.place(x=1450, y=140, height=40)
         self.button_quit.pack(side=tk.BOTTOM, pady=10)
-
-        self.cal.place(x=1550, y=30, rely=0.005,
-                       relx=0.02, height=210, width=300)
+        # quit button not placed yet, just packed
+        self.cal.place(x=1550, y=30, rely=0.005, relx=0.02, height=210, width=300)
 
         self.canvas01.place(x=100, y=40, height=600, width=800)
         self.canvas02.place(x=1000, y=40, height=600, width=800)
-
-# Data open path reproducible to other devices, not only for this one
 
     def open_excel_file_location(self):
         """Open the File Explorer to select desired excel file
@@ -203,11 +195,11 @@ class Application(tk.Tk):
             "xlsx Files", "*.xlsx"), ("csv Files", "*.csv"), ("All Files", "*.*")])
 
         if not filepath1:
+            tk.messagebox.showwarning(title='No file selected.',
+                message='Please make sure a file has been chosen before running the program.')
             filepath1 = "../data/R403Q SoftMouse Export.xlsx"
-        with open(filepath1, "r"):
-            self.textbox1.insert(tk.END, filepath1)
-
-# Save path now reproducible to other devices, not only for this one
+            with open(filepath1, "r"):
+                self.textbox1.insert(tk.END, filepath1)
 
     def save_results(self):
         """Open the file Explorer to select desired location to save results
@@ -217,6 +209,8 @@ class Application(tk.Tk):
             self.textbox2.delete(0, 'end')
         self.filepath2 = askdirectory()
         if not self.filepath2:
+            tk.messagebox.showwarning(title='No folder selected',
+                message='Please make sure a folder has been chosen before running the program.')
             self.filepath2 = "results/2021_monthly_results/plots_per_month"
         self.textbox2.insert(tk.END, self.filepath2)
 
@@ -226,8 +220,7 @@ class Application(tk.Tk):
     def obtain_data_from_excel(self):
         self.import_excel_file()
 
-# I could obtain the date in the correct format from the begining
-        # Change date format to compare with excel
+        # Converting date format to compare with excel dates
         self.init_date = self.textbox3.get()
         self.init_date[::-1]
         self.final_date = self.textbox4.get()
@@ -302,7 +295,6 @@ class Application(tk.Tk):
         birthday = [ birth_FHet, birth_FWt, birth_MHet, birth_MWt]
 
         # Using the dates entered by the user to calculate de age of the mice
-
         self.d2 = []
         dd2 = []
         
@@ -328,37 +320,28 @@ class Application(tk.Tk):
         print(dd2)
 
         print(self.dfreduced['Date_of_birth'])
-        
-        # for element in range(len(self.d2)):
-        #     for ele in range(len(self.d2[element])):
-        #         dd2.append(self.d2[element][ele])
-
-        # print(dd2)
 
         # Adding a column in excel with the calculated age
         self.dfreduced.loc[:,'Calculated Age'] = dd2
 
+        # Colors
+        self.colors = sns.color_palette("rocket", 4)
+
         # Setting parameters of length and size for the matplotlib plots
         self.d3 = []
         self.d4 = []
-
         es = 0
+        r = 0
+        self.listy = []
         for es in range(4):
             if self.d2[es] != []:
                 self.d3.append(self.d2[es][0])
             else:
                 self.d4.append(es)
-
-        # Colors
-        self.colors = sns.color_palette("rocket", 4)
-        self.listy = []
-
         if len(self.d4) == 4:
             self.b = 5
         else:
             self.b = int(max(self.d3))+1
-
-        r = 0
         for i in range(self.b+1):
             self.listy.append(r)
             r = r+1
@@ -369,14 +352,13 @@ class Application(tk.Tk):
 
         # Plot
         fig = plt.figure(figsize=(5, 5), dpi=100)
-        f = fig.gca()
 
+        f = fig.gca()
         f.hist(self.d2, bins=self.listy, color=self.colors)
         f.set_xlabel(r'Age (weeks)', fontsize=15)
         f.set_ylabel(r'Number of mice', fontsize=17)
         f.set_title('NUMBER OF MICE VS AGE',
                     horizontalalignment='center', fontweight="bold", fontsize=20)
-
         f.xaxis.set_major_locator(MaxNLocator(nbins=len(self.listy)))
         f.xaxis.set_major_locator(MaxNLocator(integer=True))
 
@@ -392,7 +374,7 @@ class Application(tk.Tk):
         fig, axs = plt.subplots(2, 2, figsize=(
             8, 8), sharey=True,  tight_layout=True)
 
-        # I need to garantee its the same x axis quantity and integers
+        # Defining histogram characteristics guaranteeing the same x axis quantity and integers
         axs[0, 0].hist(self.d2[0], bins=self.listy, color=self.colors[0],
                        label='Male Null(-)', edgecolor='white')
 
@@ -405,7 +387,14 @@ class Application(tk.Tk):
         axs[1, 1].hist(self.d2[3], bins=self.listy, color=self.colors[3],
                        label='Female R403Q(+/-)', edgecolor='white')
 
-    # There must be a better way to write these lines in a shorter way
+    # Unverified but presumably better way to write the lines underneath
+        # for i in range(1):
+        #     for j in range(1):
+        #         axs[i, j].xaxis.set_major_locator(MaxNLocator(integer=True))
+        # for i in range(1):
+        #     for j in range(1):
+        #         axs[i, j].yaxis.set_major_locator(MaxNLocator(integer=True))
+
         axs[0, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
         axs[0, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
         axs[1, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -415,12 +404,10 @@ class Application(tk.Tk):
         axs[1, 0].yaxis.set_major_locator(MaxNLocator(integer=True))
         axs[1, 1].yaxis.set_major_locator(MaxNLocator(integer=True))
 
-        # plt.subplots_adjust(hspace=0)
         axs[1, 0].set_xlabel(r'Age (weeks)', fontsize=15)
         axs[1, 1].set_xlabel(r'Age (weeks)', fontsize=15)
         axs[0, 0].set_ylabel(r'Number of mice', fontsize=17,
                              horizontalalignment='right')
-
         axs[0, 0].legend()
         axs[0, 1].legend()
         axs[1, 0].legend()
@@ -434,17 +421,17 @@ class Application(tk.Tk):
     def display_plot(self):
         """plot function is created for plotting the graph in tkinter window
         """
-        # create the Tkinter canvas containing the Matplotlib figures
+        # creating two Tkinter canvas that will contain the Matplotlib figures
         fig = self.plot_individual_hist()
         fig2, ax = self.plot_4_hist()
 
-        # create canvas and draw figures into canvas
+        # creating canvas and drawing figures into canvas
         self.canvas2 = FigureCanvasTkAgg(fig, master=self.canvas02)
         self.canvas1 = FigureCanvasTkAgg(fig2, master=self.canvas01)
         self.canvas1.draw()
         self.canvas2.draw()
 
-        # create the Matplotlib toolbars
+        # creating the Matplotlib toolbars
         self.toolbar1 = NavigationToolbar2Tk(
             self.canvas1, self, pack_toolbar=False)
         self.toolbar2 = NavigationToolbar2Tk(
@@ -452,111 +439,80 @@ class Application(tk.Tk):
         self.toolbar1.update()
         self.toolbar2.update()
 
-        # place the canvas on the Tkinter window
+        # placing the canvas on the Tkinter window
         self.toolbar1.place(x=400, y=900)
         self.toolbar2.place(x=1300, y=900)
 
-# better if they where placed. 
-        # pack the widgetsinside the Tkinter canvas
+        # packing the widgets inside the Tkinter canvas
         self.canvas1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.canvas2.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        self.crear_excel_de_proyectos()
+        # Calling the function that creates the excel sheets
 
-    # def create_excel_workbook_months(self):
-        # I need a function to create and saves excel sheets with the gui info
-    def crear_excel_de_proyectos(self):
-        # From folderManager I have a folder where to save the info
+        self.create_excel_file()
+
+    def load_workbook(path_workbook_data):
+        print("LOADING SOMETHING")
+        """
+        Loading an excel workbook that already exists
+        or opening a new one if it does not
+
+        Parameters
+        ----------
+        path_workbook_data : [str]
+            [path to the excel workbook location]
+        """
+        if os.path.exists(path_workbook_data):
+            print('old file') 
+            return openpyxl.load_workbook(path_workbook_data)
+        print('new file') 
+        return openpyxl.Workbook()
+
+    def create_excel_file(self):
+        
         self.fm = FolderManager(self)
         path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
         plot_name_fig_four = str(self.fm.plot_4_name)
         path_image = "results/2021_monthly_results/plots_per_month/" + plot_name_fig_four + ".png"
 
-        # I should do an if statement (path exist) and if statement (excel object exists): 
-        # print('old file')
+        wb = load_workbook(path_workbook_data)
+        wb.create_sheet(title=self.final_date,index = 0)
+        sheet = wb[self.final_date]
+        rows = dataframe_to_rows(self.dfreduced,index=False)
+        
+        sheet.column_dimensions['A'].width = 20
+        sheet.column_dimensions['B'].width = 20
+        sheet.column_dimensions['C'].width = 20
+        sheet.column_dimensions['D'].width = 20
+        sheet.column_dimensions['E'].width = 20
 
-        book = load_workbook("data_results_new.xlsx")
-        op_writer = pd.ExcelWriter("data_results_new.xlsx", engine = 'openpyxl')
-        op_writer.book = book
+        for r_idx, row in enumerate(rows, 1):
+            for c_idx, value in enumerate(row, 1):
+                sheet.cell(row=r_idx, column=c_idx, value=value)
 
-        op_writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
             
-        # loop to write the worksheet try except
+        img = openpyxl.drawing.image.Image(path_image)
+        img.height = 400
+        img.width = 400
+        sheet.add_image(img, 'H1')
+        print(wb.worksheets)
 
-        self.dfreduced.to_excel(op_writer, plot_name_fig_four, index = False)
+        for column in range(1, sheet.max_column +1):
+            cell = sheet.cell(row=1, column=column)
+            cell.style = 'Pandas'
 
-        op_writer.save()
-        op_writer.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        # book_2 = load_workbook("data_results_new.xlsx")
-        # writer = pd.ExcelWriter("data_results_new.xlsx", engine = 'openpyxl')
-
-        # writer.book = book_2
-        # if plot_name_four not in op_writer.sheets:
-        #     ws = op_writer.book.create_sheet(plot_name_four)
-        
-        # self.dfreduced.to_excel(writer, plot_name_four, index = False)
-        
-        # nl.to_excel( self.dfreduced, filename= "data_results.xlsx", sheet_name=plot_name_four, index = False)
-
-#         else:
-
-#             print('new file')
-#             wb = Workbook( "{}\\{}".format( self.fm.directory_per_month,'{}.xlsx'.format("data_results")  ) )
-#             ws = wb.active
-#             ws.title = "New Title"
-#             ws1 = wb.create_sheet("Mysheet") # insert at the end (default)
-#             ws1 =  wb["New Title"]
-#             print(wb.sheetnames)
-#             # for sheet in wb:
-# # ...             if 
-
-
-        
-
-        # self.fm = FolderManager(self)
-        # path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
-        # nl.to_excel(self.dfreduced, path_workbook_data, sheet_name=self.fm.plot_4_name, index = False)
-      
+        wb.save(path_workbook_data)
+        wb.close()
 
     def reset_app(self):
         self.canvas1.get_tk_widget().destroy()
         self.canvas2.get_tk_widget().destroy()
         self.toolbar1.destroy()
         self.toolbar2.destroy()
-        # self.textbox3.clear()
-        # self.textbox4.clear()
 
 class FolderManager:
     """
-    Enables the creation and management of folder structures for multipurpose 
+    Enables the developement and management of folder structures for multipurpose 
     projects with datetime configurations.
     :param project_name: name of the project for the FolderManager agent.
     """
@@ -568,7 +524,6 @@ class FolderManager:
         self.generate_folder_paths()
         self.create_folders()
         self.save_image()
-        # self.create_excel_workbook_weeks()
 
     def get_current_important_values(self):
         self.year = self.current_datetime.strftime("%Y")
@@ -585,21 +540,6 @@ class FolderManager:
         self.filepath_4_plot = str(self.app_object.filepath2) + "/" + \
             str(self.plot_4_name)+".png"
         self.hist_4_plot = plt.savefig(self.filepath_4_plot)
-        # self.filepath_4_plot = str(self.app_object.filepath2) + "/" + \
-        #     str(self.plot_4_name)+".png"
-        # self.hist_4_plot = plt.savefig(self.filepath_4_plot)
-
-    # def save_image_2(self):
-
-        # if self.app_object.init_month != self.app_object.final_month:
-        #     self.plot_name = str(self.app_object.init_month) + "-" + \
-        #         str(self.app_object.final_month) + "_histogram"
-        # else:
-        #     self.plot_name = str(self.app_object.init_month) + "_histogram"
-
-        # filepath_hist_plot = str(self.app_object.filepath2) + "/" + \
-        #     str(self.plot_name) + ".png"
-        # hist_plot = plt.savefig(filepath_hist_plot)
 
     def generate_folder_paths(self):
         self.current_directory = os.path.abspath(os.path.dirname(__file__))
@@ -628,100 +568,10 @@ class FolderManager:
     def get_path_for_results(self):
         return self.directory_per_month
 
-    def create_jpeg_from_figures(self):
-        pass
-
-
-# class ExcelDevelopement:
-
-#     def __init__(self, app_object):
-
-#         self.fm = FolderManager(app_object)
-#         self.app_object = app_object
-#         self.create_excel_workbook_months()
-
-#     def create_excel_workbook_months(self):
-
-#         d2 = self.app_object.d2
-#         dfreduced = self.app_object.dfreduced
-#         # df = self.app_object.df
-#         plot_name_four = str(self.fm.plot_4_name)
-#         path_image = "results/2021_monthly_results/plots_per_month/" + plot_name_four + ".png"
-#         path_workbook = str(self.fm.year) + "_data_results.xlsx"
-#         path_workbook_data = "results/2021_monthly_results/data_results.xlsx"
-#         nl.to_excel(dfreduced,path_workbook_data, sheet_name=self.fm.plot_4_name, index = False)
-
-
-# Need to clarify the date as a excel sheet
-        
-        # if not os.path.isfile(path_workbook_data):
-        # print('old file')
-
-        # writer = pd.ExcelWriter(path_workbook_data, engine = 'openpyxl')
-        # writer.book = load_workbook(path_workbook_data)
-        # writer.book.create_sheet("{}".format(plot_name_four))
-        # writer.save()
-        # writer.close()
-
-        # wb = xlsxwriter.Workbook("{}\\{}".format(
-        #     self.fm.get_path_for_results(), path_workbook))
-        # center_bold_border = wb.add_format(
-        #     {"bold": True, "align": "center", "border": True})
-        # center_border = wb.add_format({"align": "center", "border": True})
-
-        # ws = wb.add_worksheet("{}".format(plot_name_four))
-
-        # chart_names = ['Male Null(-) ', 'Female Null(-) ',
-        #                'Male R403Q(+/-)', 'Female R403Q(+/-)']
-
-
-        # row, col = 0, 0
-        # for chart in range(len(chart_names)):
-
-        #     # Add charts title
-        #     ws.merge_range(row, col, row, col+1,
-        #                    "{}".format(chart_names[chart]), center_bold_border)
-
-        #     # Add charts subtitles
-        #     row += 1
-        #     ws.write(row, col, "Age", center_border)
-        #     ws.write(row, col+1, "mice #", center_border)
-
-        #     # Add charts data
-        #     row += 1
-        #     print(d2[chart])
-        #     dic_mice = {}
-
-        #     # Count mice based on ages and adding to dictionary
-        #     for i in range(len(d2[chart])):
-        #         if str(d2[chart][i]) in dic_mice:
-        #             dic_mice["{}".format(
-        #                 d2[chart][i])] = dic_mice["{}".format(d2[chart][i])]+1
-        #         else:
-        #             dic_mice["{}".format(d2[chart][i])] = 1
-
-        #     print(dic_mice)
-
-        #     # write data from dictionary of ages and number of mice
-        #     for age in dic_mice:
-        #         ws.write(row, col, "{}".format(age), center_border)
-        #         ws.write(row, col+1, "{}".format(dic_mice[age]), center_border)
-        #         row += 1
-
-        #     # Move to next chart
-        #     row = 0
-        #     col += 3
-        # # Insert the image created for the specific
-
-        # ws.insert_image(row, col, path_image, {
-        #                 'x_scale': 0.65, 'y_scale': 0.65})
-        # wb.close()
-
 
 if __name__ == "__main__":
     app = Application()
     app.geometry("1900x990+0+0")
     app.resizable(True, False)
-    app.iconbitmap(r'../docs/mickey.ico')
+    app.iconbitmap(r'../docs/mice_icon.ico')
     app.mainloop()
-    # ed = ExcelDevelopement(app)

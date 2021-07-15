@@ -10,9 +10,12 @@ The Mice Counter is an application for managing data of mice litters. The code a
   + This application is written in Python's Graphical User Interface toolkit: Tkinter.
 
 <img src="img/The_mice_counter_GUI.png" width="82%">
+
+The application works on any computer that has Excel. The result are shown in the following image:
+
 <img src="img/The_mice_counter_xlsx_result.png" width="82%">
 
-The application works on any computer that has Excel.
+
 
 ## Organization
 

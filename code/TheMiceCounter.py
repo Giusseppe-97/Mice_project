@@ -321,10 +321,6 @@ class Application(tk.Tk):
                 j = j + 1
             d1.sort(reverse=True)
             self.d2.append(d1)
-        print(self.d2)
-        print(dd2)
-
-        print(self.dfreduced['Date_of_birth'])
 
         # Adding a column in excel with the calculated age
         self.dfreduced.loc[:,'Calculated Age'] = dd2
@@ -457,7 +453,7 @@ class Application(tk.Tk):
         self.create_excel_file()
 
     def load_workbook(path_workbook_data):
-        print("LOADING SOMETHING")
+        print("LOADING...")
         """
         Loading an excel workbook that already exists
         or opening a new one if it does not
@@ -500,7 +496,6 @@ class Application(tk.Tk):
         img.height = 400
         img.width = 400
         sheet.add_image(img, 'H1')
-        print(wb.worksheets)
 
         for column in range(1, sheet.max_column +1):
             cell = sheet.cell(row=1, column=column)

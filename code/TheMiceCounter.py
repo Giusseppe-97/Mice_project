@@ -13,13 +13,10 @@ except:
 
 import tkinter as tk
 from tkinter import ttk
-from tkcalendar_package import Calendar as tkc
-from tkinter import messagebox
-
+from tkcalendar import Calendar as tkc
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import askdirectory
 
-from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 import matplotlib.pyplot as plt
@@ -30,17 +27,13 @@ import seaborn as sns
 
 import os
 from datetime import datetime as dt
-import datetime
 
-from openpyxl import Workbook
-from openpyxl.utils.dataframe import dataframe_to_rows
-from openpyxl.utils import get_column_letter
-from openpyxl.drawing.image import Image
 import openpyxl
+from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl import load_workbook
-import nicexcel_package as nl
-# from PIL import ImageTk, Image
+import nicexcel as nl
 
+print("Loading TheMiceCounter application. This might take a minute.")
 
 class Application(tk.Tk):
     """[Creating a main App class where all the frames are going to be set upon]
@@ -53,6 +46,7 @@ class Application(tk.Tk):
         """
 
         super().__init__(*args, **kwargs)
+
 
         # Set style of the GUI
         self.tk.call('source', r'../style/azure.tcl')
@@ -75,7 +69,7 @@ class Application(tk.Tk):
     def configure_basic_tk_properties(self):
         """This method configures the basic tkinter esthetic properties for the GUI
         """
-        self.title("   Mice GUI")
+        self.title("  TheMiceCounter")
 
         # Setting the main App in the center regardless to the window's size chosen by the user
         self.rowconfigure(0, weight=1)

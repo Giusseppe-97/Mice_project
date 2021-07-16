@@ -1,5 +1,5 @@
 ---
-title: Isometric activation
+title: Working on a existing workbook
 has_children: false
 parent: Getting started
 grand_parent: Demos
@@ -10,38 +10,34 @@ nav_order: 1
 
 ## Overview
 
-This demo shows step by step how to use TheMiceCounter application.
+This demo shows step by step how to use TheMiceCounter application when starting from scratch.
 
 ## What this demo does
 
 This demo:
 
-+ Runs a simulation in a new woorkbook sheet of excel
-Runs a single simulation in which a half-sarcomere is held isometric and activated in a solution with a pCa of 4.5
++ Runs the application in a new excel woorkbook.
 
-+ Plots a summary of the simulation
++ Ilustrates how the graph plots are displayed in the application  before being saved on your results folder.
 
 ## Instructions
 
-Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need the FiberSim folder, an Anaconda distribution of Python, and an active FiberSim environment to run this demo.
+Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need TheMiceCounter folder and an Anaconda distribution of Python to run this demo.
 
 ### Getting ready
 
 + Open an Anaconda Prompt
 
-+ Activate the FiberSim Anaconda Environment by executing:
 ```
-conda activate fibersim
-```
-+ Change directory to `<FiberSim_dir>/code/FiberPy/FiberPy`, where `<FiberSim_dir>` is the directory where you installed FiberSim. Here is a short video showing you how to use the `cd` command.
++ Change directory to `<TheMiceCounter_dir>/code`, where `<TheMiceCounter_dir>` is the directory where you installed TheMiceCounter. Here is a short video showing you how to use the `cd` command.
 
 [![](cd_video.PNG)](https://drive.google.com/file/d/1g90Awaesj1UyHP0lA-S-X5uSDjvw26II/view?usp=sharing)
 
-### Run a simulation
+### Run the application
 
 + Type:
  ```
- python FiberPy.py run_batch "../../../demo_files/getting_started/isometric_activation/batch_isometric_activation.json"
+ python TheMiceCounter.py 
  ```
 
 + You should see text appearing in the terminal window, showing that the simulations are running. When it finishes (this may take a few minutes), you should see something similar to the image below.

@@ -13,7 +13,7 @@ except:
 
 import tkinter as tk
 from tkinter import ttk
-import tkcalendar as tkc
+from tkcalendar_package import Calendar as tkc
 from tkinter import messagebox
 
 from tkinter.filedialog import askopenfilename
@@ -38,7 +38,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.drawing.image import Image
 import openpyxl
 from openpyxl import load_workbook
-import nicexcel as nl
+import nicexcel_package as nl
 # from PIL import ImageTk, Image
 
 
@@ -63,7 +63,7 @@ class Application(tk.Tk):
         self.mainFrame2 = tk.Frame(self)
 
         # Create Calendar
-        self.cal = tkc.Calendar(
+        self.cal = tkc(
             self.mainFrame1, selectbackground="#120597", background="#120597",
             selectmode="day", year=2021, month=5, day=1
         )

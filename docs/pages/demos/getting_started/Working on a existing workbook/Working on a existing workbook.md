@@ -6,17 +6,18 @@ grand_parent: Demos
 nav_order: 1
 ---
 
-# Isometric activation
+# Step by step
 
 ## Overview
 
-This demo shows how to run a single isometric simulation.
+This demo shows step by step how to use TheMiceCounter application.
 
 ## What this demo does
 
 This demo:
 
-+ Runs a single simulation in which a half-sarcomere is held isometric and activated in a solution with a pCa of 4.5
++ Runs a simulation in a new woorkbook sheet of excel
+Runs a single simulation in which a half-sarcomere is held isometric and activated in a solution with a pCa of 4.5
 
 + Plots a summary of the simulation
 

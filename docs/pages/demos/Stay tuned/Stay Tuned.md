@@ -1,8 +1,8 @@
 ---
 title: Stay Tuned
-nav_order: 6
 parent: Demos
 has_children: False
+nav_order: 2
 ---
 
 # Histogram Display Preview 
@@ -17,9 +17,7 @@ For instance, this application should have its own exe file that doesn't depend 
 On the other hand, it is intended for the app to be able to extract data from bigger database platforms such as RedCap. This would allow researchers to rapidly get a visualization of the data they have recorded.
 
 
-It's also possible to save an excel workbooks or even create new sheets in preexisting workbooks, as shown in the following picture: 
+<img src="Stay_Tuned.png" width="90%"> 
 
-<img src="Stay_Tuned.png" width="100%"> 
 
-Here, the sheets are named after the dates selected when running the application.
-
+We will add new tabs describing the new features as they get accomplished.

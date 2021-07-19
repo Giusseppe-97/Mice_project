@@ -1,5 +1,5 @@
 ---
-title: Working on a existing workbook
+title: Pre-existing workbook
 has_children: false
 parent: Getting started
 grand_parent: Demos

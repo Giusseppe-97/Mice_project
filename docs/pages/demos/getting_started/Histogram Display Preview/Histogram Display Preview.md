@@ -11,7 +11,7 @@ nav_order: 2
 ## Overview
 
 In a nutshell, TheMiceCounter application has a frame where the images can be seen before being saved in the excel file.
-<img src="Histogram Display Preview.png" width="87%">
+<img src="Histogram Display Preview.PNG" width="87%">
 
 ## What this demo does
 

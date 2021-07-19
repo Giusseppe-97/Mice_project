@@ -11,15 +11,9 @@ nav_order: 1
 ## Overview
 
 In a nutshell, TheMiceCounter application has a frame where the user can choose the data that is going to be plotted into the excel file.
-<img src="Run Data.png" width="87%">
 
-## What this demo does
+<img src="Run Data.PNG" width="87%">
 
-This demo:
-
-+ Runs the application in a new excel woorkbook.
-
-+ Ilustrates how the graph plots are displayed in the application  before being saved on your results folder.
 
 ## Instructions
 
@@ -30,9 +24,13 @@ Before proceeding, make sure that you have followed the [installation instructio
 + Open an Anaconda Prompt
 
 ```
-+ Change directory to `<TheMiceCounter_dir>/code`, where `<TheMiceCounter_dir>` is the directory where you installed TheMiceCounter. Here is a short video showing you how to use the `cd` command.
++ Change directory to `<TheMiceCounter_dir>/code`, where `<TheMiceCounter_dir>` is the directory where you installed TheMiceCounter. 
+```
+
+Here is a short video showing you how to use the `cd` command.
 
 [![](cd_video.PNG)](https://drive.google.com/file/d/1g90Awaesj1UyHP0lA-S-X5uSDjvw26II/view?usp=sharing)
+
 
 ### Run the application
 
@@ -41,9 +39,13 @@ Before proceeding, make sure that you have followed the [installation instructio
  python TheMiceCounter.py 
  ```
 
-+ You should see text appearing in the terminal window, showing that the simulations are running. When it finishes (this may take a few minutes), you should see something similar to the image below.
++ You should see text appearing in the terminal window, showing that the application is starting. 
 
-![command prompt](command_prompt.png)
+[command prompt](command_prompt.PNG)
+
+When it opens (this may take a few minutes), you should see something similar to the image below.
+
+<img src="Starting App.PNG" width="87%">
 
 ### Viewing the results
 

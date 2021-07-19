@@ -3,7 +3,7 @@ title: Histogram Display Preview
 has_children: false
 parent: Getting started
 grand_parent: Demos
-nav_order: 2
+nav_order: 3
 ---
 
 # Step by step

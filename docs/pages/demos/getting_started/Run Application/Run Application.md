@@ -40,11 +40,11 @@ Here is a short video showing you how to use the `cd` command.
 
 + You should see text appearing in the terminal window, showing that the application is starting. 
 
-<img src="command_prompt.PNG" width="90%">
+<img src="command_prompt.png" width="90%">
 
 When it opens (this may take a few minutes), you should see something similar to the image below.
 
-<img src="Starting App.PNG" width="100%">
+<img src="Starting App.PNG" width="120%">
 
 
 

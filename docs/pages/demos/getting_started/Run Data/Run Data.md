@@ -10,7 +10,8 @@ nav_order: 1
 
 ## Overview
 
-This demo shows step by step how to use TheMiceCounter application when starting from scratch.
+In a nutshell, TheMiceCounter application has a frame where the user can choose the data that is going to be plotted into the excel file.
+<img src="Run Data.png" width="87%">
 
 ## What this demo does
 

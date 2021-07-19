@@ -10,10 +10,9 @@ nav_order: 1
 
 ## Overview
 
-In a nutshell, TheMiceCounter application has a frame where the user can choose the data that is going to be plotted into the excel file.
+In a nutshell, TheMiceCounter application has a frame where the user can select their data. This data is going to be plotted into the excel file.
 
-<img src="Run Data.PNG" width="87%">
-
+<img src="Run Data.PNG" width="100%">
 
 ## Instructions
 
@@ -41,15 +40,26 @@ Here is a short video showing you how to use the `cd` command.
 
 + You should see text appearing in the terminal window, showing that the application is starting. 
 
-[command prompt](command_prompt.PNG)
+<img src="command_prompt.PNG" width="90%">
 
 When it opens (this may take a few minutes), you should see something similar to the image below.
 
-<img src="Starting App.PNG" width="87%">
+<img src="Starting App.PNG" width="100%">
 
 ### Viewing the results
 
-All of the results from the simulation are written to files in `<repo>/demo_files/getting_started/isometric_activation/sim_output`
+All of the results obtained from running the application are written in the result folder located in `<repo>/code/results`. 
+
+A subfolder named `<(year)_monthly_results>` has all of the information of a lattice Ran that specific year. In this case, it has the data of 2021 mice lattices.
+This folder contains the different files that are being saved, specific of the mice lattice the user is looking into. It is divided into two parts:
+
++ The excel workbook, always saved as `<data_results>`. 
+
++ A `<plots_per_month>` folder which contains all of the plots created by the user with the application. 
+
+Both the excel workbook and the plots_per_month folder carry information the user created with the application and will be explained next.
+
+### Understanding the results
 
 <img src='output_folder.png'>
 

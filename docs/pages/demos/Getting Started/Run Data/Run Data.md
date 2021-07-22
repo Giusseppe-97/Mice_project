@@ -10,11 +10,13 @@ nav_order: 1
 
 ## Overview
 
-In a nutshell, TheMiceCounter application has a frame where the user can select their data. This data is going to be plotted into the excel file.
+After following the [Running the App](../../../installation/Running the App/Running the App.html) instructions, TheMiceCounter application would start and should look something like this:
 
 <img src="Run Data.PNG" width="100%">
 
 ## Instructions
+
+In a nutshell, TheMiceCounter application has a frame where the user can select their data input and output. This data,
 
 Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need TheMiceCounter folder and an Anaconda distribution of Python to run this demo.
 
@@ -26,7 +28,7 @@ Before proceeding, make sure that you have followed the [installation instructio
 + Change directory to `<TheMiceCounter_dir>/code`, where `<TheMiceCounter_dir>` is the directory where you installed TheMiceCounter. 
 ```
 
-Here is a short video showing you how to use the `cd` command.
+Here is a short video showing you how to use the `cd` command in another software called FiberSim.
 
 [![](cd_video.PNG)](https://drive.google.com/file/d/1g90Awaesj1UyHP0lA-S-X5uSDjvw26II/view?usp=sharing)
 

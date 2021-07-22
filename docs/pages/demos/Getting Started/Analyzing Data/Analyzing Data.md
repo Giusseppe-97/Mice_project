@@ -3,7 +3,7 @@ title: Analyzing Data
 has_children: false
 parent: Getting started
 grand_parent: Demos
-nav_order: 4
+nav_order: 3
 ---
 
 # Step by step

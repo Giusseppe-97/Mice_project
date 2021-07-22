@@ -3,7 +3,7 @@ title: Run Data
 has_children: false
 parent: Getting started
 grand_parent: Demos
-nav_order: 2
+nav_order: 1
 ---
 
 # Step by step

@@ -1,8 +1,7 @@
 ---
-title: Activating Anaconda Environment
+title: Running the App
 has_children: false
-parent: Getting started
-grand_parent: Demos
+parent: Installation
 nav_order: 1
 ---
 

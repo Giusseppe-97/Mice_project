@@ -3,7 +3,7 @@ title: Pre-existing workbook
 has_children: false
 parent: Getting started
 grand_parent: Demos
-nav_order: 6
+nav_order: 5
 ---
 
 # Step by step

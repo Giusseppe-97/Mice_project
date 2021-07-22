@@ -49,7 +49,7 @@ class Application(tk.Tk):
 
 
         # Set style of the GUI
-        self.tk.call('source', r'../style/azure.tcl')
+        self.tk.call('source', r'packages/style_azure/azure.tcl')
         ttk.Style().theme_use('azure')
 
         # Create Main Frames
@@ -567,5 +567,5 @@ if __name__ == "__main__":
     app = Application()
     app.geometry("1900x990+0+0")
     app.resizable(True, False)
-    app.iconbitmap(r'../docs/mice_icon.ico')
+    app.iconbitmap(r'../docs/_site/favicon.ico')
     app.mainloop()

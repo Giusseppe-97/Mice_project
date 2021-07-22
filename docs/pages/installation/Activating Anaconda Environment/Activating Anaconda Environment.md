@@ -1,5 +1,5 @@
 ---
-title: Run Application
+title: Activating Anaconda Environment
 has_children: false
 parent: Getting started
 grand_parent: Demos
@@ -10,13 +10,11 @@ nav_order: 1
 
 ## Overview
 
-In a nutshell, TheMiceCounter application has a frame where the user can select their data. This data is going to be plotted into the excel file.
-
-<img src="Run Data.PNG" width="100%">
+Right now, TheMiceCounter application needs to be run with the Anaconda distribution of Python. In the future it is set to work uniquely with TheMiceCounter exe file located in the bin folder. 
 
 ## Instructions
 
-Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need TheMiceCounter folder and an Anaconda distribution of Python to run this demo.
+Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). 
 
 ### Getting ready
 
@@ -29,7 +27,6 @@ Before proceeding, make sure that you have followed the [installation instructio
 Here is a short video showing you how to use the `cd` command.
 
 [![](cd_video.PNG)](https://drive.google.com/file/d/1g90Awaesj1UyHP0lA-S-X5uSDjvw26II/view?usp=sharing)
-
 
 ### Run the application
 

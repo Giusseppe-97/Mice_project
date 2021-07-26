@@ -6,16 +6,15 @@ nav_order: 1
 
 # TheMiceCounter
 
-The Mice Counter is an application for managing data of mice litters. The code allows the user to choose specific information of mice, such as id, genotype, sex, date of birth, age, etc. and creates excel files with the chosen data.
-  + This application is written in Python's Graphical User Interface toolkit: Tkinter.
+TheMiceCounter is an application for managing  mice litters' data. The app allows the user to choose specific information of a mice lattice, such as id, genotype, sex, date of birth, age, etc. and creates excel files showing that data in either a new excel Workbook or a new sheet of a pre-existing one.  Additionally, it plots the Quantity of mice vs their Age saves the plot both as a JPG file in a different folder, and in the excel file the user created. This application was created to use the data downloaded from RedCap, and it is intended to grow so that the user can directly use data from it to create excel files with plotted data. 
 
-<img src="img/The_mice_counter_GUI.png" width="95%">
+  + This application is written in Python and uses it's Graphical User Interface toolkit: Tkinter.
+
+<img src="img/The_mice_counter_GUI.png" width="100%">
 
 The application works on any computer that has Excel. The result are shown in the following image:
 
-<img src="img/The_mice_counter_xlsx_result.png" width="95%">
-
-
+<img src="img/The_mice_counter_xlsx_result.png" width="100%">
 
 ## Organization
 

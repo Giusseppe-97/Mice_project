@@ -9,11 +9,11 @@ nav_order: 1
 The Mice Counter is an application for managing data of mice litters. The code allows the user to choose specific information of mice, such as id, genotype, sex, date of birth, age, etc. and creates excel files with the chosen data.
   + This application is written in Python's Graphical User Interface toolkit: Tkinter.
 
-<img src="img/The_mice_counter_GUI.png" width="82%">
+<img src="img/The_mice_counter_GUI.png" width="95%">
 
 The application works on any computer that has Excel. The result are shown in the following image:
 
-<img src="img/The_mice_counter_xlsx_result.png" width="82%">
+<img src="img/The_mice_counter_xlsx_result.png" width="95%">
 
 
 

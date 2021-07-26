@@ -1,5 +1,5 @@
 ---
-title: Installing TheMiceCounter App
+title: Installing TheMiceCounter
 has_children: false
 parent: Installation
 nav_order: 1

@@ -9,44 +9,25 @@ nav_order: 1
 # Step by step
 
 ## Overview
+Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need TheMiceCounter folder and an Anaconda distribution of Python to run this demo.
 
 After following the [Running the App](../../../installation/Running the App/Running the App.html) instructions, TheMiceCounter application would start and should look something like this:
 
-<img src="Run Data.PNG" width="100%">
+<img src="Starting App.PNG" width="100%">
 
 ## Instructions
 
-In a nutshell, TheMiceCounter application has a frame where the user can select their data input and output. This data,
+The first step after opening the application is to select both the location of data that is going to be used and the folder where you want to save the results. This can be set on the input and output entries, as shown in the image below:
 
-Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need TheMiceCounter folder and an Anaconda distribution of Python to run this demo.
+<img src="Input & Output.PNG" width="100%">
 
-### Getting ready
+Now, it is time to set a time frame. Select in the calendar the starting date you want information from your mice litter and click on the initial date button. Do the same for the final date. You can change the dates by clicking on a new date in the calendar and then clicking the initial of final date button. 
 
-+ Open an Anaconda Prompt
+<img src="Setting dates & running.PNG" width="100%">
 
-```
-+ Change directory to `<TheMiceCounter_dir>/code`, where `<TheMiceCounter_dir>` is the directory where you installed TheMiceCounter. 
-```
+After you have finished setting the time frame you are ready to Run the application. Click on the RUN button. Your results will take a second to appear in the lower part of the app. 
 
-Here is a short video showing you how to use the `cd` command in another software called FiberSim.
-
-[![](cd_video.PNG)](https://drive.google.com/file/d/1g90Awaesj1UyHP0lA-S-X5uSDjvw26II/view?usp=sharing)
-
-
-### Run the application
-
-+ Type:
- ```
- python TheMiceCounter.py 
- ```
-
-+ You should see text appearing in the terminal window, showing that the application is starting. 
-
-<img src="command_prompt.PNG" width="90%">
-
-When it opens (this may take a few minutes), you should see something similar to the image below.
-
-<img src="Starting App.PNG" width="100%">
+Check out [Histogram Display Preview](../Histogram Display Preview/Histogram Display Preview.html) for the next step. 
 
 
 

@@ -11,7 +11,7 @@ Right now, TheMiceCounter application needs to be run with the Anaconda distribu
 
 ## Instructions
 
-Before proceeding, make sure that you have followed the [installation instructions](../installation/installation.html). 
+Before proceeding, make sure that you have followed the [installation instructions](../installation.html). 
 
 ### Getting ready
 

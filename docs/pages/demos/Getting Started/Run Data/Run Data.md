@@ -30,7 +30,7 @@ This demo:
 
 The first step after opening the application is to select both the location of data that is going to be used and the folder where you want to save the results. This can be set on the input and output entries, as shown in the image below:
 
-<img src="Input & Output.PNG" width="100%">
+<img src="Input_output.PNG" width="100%">
 
 Now, it is time to set a time frame. Select in the calendar the starting date you want information from your mice litter and click on the initial date button. Do the same for the final date. You can change the dates by clicking on a new date in the calendar and then clicking the initial of final date button. 
 

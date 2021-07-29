@@ -11,7 +11,7 @@ Right now, TheMiceCounter application needs to be run with the Anaconda distribu
 
 ## Instructions
 
-Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). 
+Before proceeding, make sure that you have followed the [installation instructions](../installation/installation.html). 
 
 ### Getting ready
 
@@ -23,7 +23,7 @@ Before proceeding, make sure that you have followed the [installation instructio
 
 Here is a short video showing you how to use the `cd` command.
 
-[![](cd_video.PNG)](https://drive.google.com/file/d/1g90Awaesj1UyHP0lA-S-X5uSDjvw26II/view?usp=sharing)
+[cd_video.PNG](https://drive.google.com/file/d/1g90Awaesj1UyHP0lA-S-X5uSDjvw26II/view?usp=sharing)
 
 ### Run the application
 

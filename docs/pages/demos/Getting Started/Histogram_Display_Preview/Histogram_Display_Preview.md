@@ -13,7 +13,8 @@ nav_order: 2
 Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need the FiberSim folder, an Anaconda distribution of Python, and an active FiberSim environment to run this demo.
 
 After following the [Running the App](../../../installation/Running the App/Running the App.html) instructions, and the [Run Data Instructions](../Run Data/Run Data.html), the lower part of the TheMiceCounter application will show you the plotted information preview, which looks something like this:
-<img src="Histogram Display Preview.PNG" width="100%">
+
+<img src="Histagram Display Preview.PNG" width="100%">
 
 ## What this demo does
 
@@ -23,6 +24,7 @@ This demo:
     - Which histograms can be seen
     
 + Explains the Reset and Quit buttons
+
 + Introduces the Excel Workbook file
     - Where are these plots saved
 

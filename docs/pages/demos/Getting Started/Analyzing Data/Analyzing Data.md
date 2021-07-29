@@ -10,13 +10,25 @@ nav_order: 3
 
 ## Overview
 
+After following the [Run Data](../Run Data/Run Data.html) and the [Histogram Display Preview](../installation/Running the App/Running the App.html) instructions, TheMiceCounter application will have created some new documents locaterd in the result folder located in `<repo>/code/results`. 
+
+## What this demo does
+
+This demo:
+
++ Locate the results
+    - <year>_monthly_results
+        - plots_per_month
+        - data_results
+
++ Differentiate between a new Excel workbook and a pre-existing one
 
 ### Viewing the results
 
-All of the results obtained from running the application are written in the result folder located in `<repo>/code/results`. 
+As mentioned before, all of the results obtained from running the application are written in the result folder located in `<repo>/code/results`. 
 
-A subfolder named `<(year)_monthly_results>` has all of the information of a lattice Ran that specific year. In this case, it has the data of 2021 mice lattices.
-This folder contains the different files that are being saved, specific of the mice lattice the user is looking into. It is divided into two parts:
+A subfolder named `<(year)_monthly_results>` has all of the information of a lattice Ran that specific year. In case there are experiments longer than a year, a new subfolder would be created automatically. In this case, it has the data of a mice lattice this year (2021).
+This folder contains the different files specific of the mice lattice the user is looking into. It is divided into two parts:
 
 + The excel workbook, always saved as `<data_results>`. 
 
@@ -26,72 +38,100 @@ Both the excel workbook and the plots_per_month folder carry information the use
 
 ### Understanding the results
 
-<img src='output_folder.png'>
+The file `plots_per_month.png` shows:
 
-The file `summary.png` shows pCa, length, force per cross-sectional area (stress), and thick and thin filamnt properties plotted against time..
+<img src='plots_per_month.png'>
 
-<img src='summary.png' width="50%">
+The file `data_results.png` shows:
 
-The underlying data are stored in `results.txt`
-
-<img src='results.png' width="100%">
+<img src='data_results.png' width="50%">
 
 ## How this worked
 
-This demonstration simulated a half-sarcomere that was held isometric and activated in a solution with a pCa of 4.5.
+This demonstration explains the creation of a '<(year)_monthly_results>' with its subfolders: plots_per_month and data_results.
 
-The simulation was controlled by a batch file (shown below) that was passed to FiberPy.
+The simulation was controlled by a class in TheMiceCounter application (shown below).
 
-The first few lines, labelled `FiberSim_batch` tell FiberPy where to find the `FiberCpp.exe` file which is the core model.
+This class, labelled `FolderManager` Enables the developement and management of folder structures for multipurpose projects with datetime configurations.
 
-The rest of the file defines a single `job`. FiberPy passes the job to the core model which runs the simulation and saves the results.
+The file defines the different functions needed for this class to create every specific folder and name it appropiately.
 
-Each job consists of:
+__init__function:
++ initializes the current time and the other functions of the class.
 
-+ a model file - which defines the properties of the half-sarcomere including the structure, and the biophysical parameters that define the kinetic schemes for the thick and thin filaments
-+ a protocol file - the pCa value and information about whether the system is in length control or force-control mode
-+ an options file - which can be used to set additional criteria
-+ a results file - which stores information about the simulation
+get_current_important_values:
++ extract the current year, month and day.
 
-````
-{
-    "FiberSim_batch": {
-        "FiberCpp_exe":
-        {
-            "relative_to": "this_file",
-            "exe_file": "../../../bin/FiberCpp.exe"
-        },
-        "job":[
-            {
-                "relative_to": "this_file",
-                "model_file": "sim_input/model.json",
-                "options_file": "sim_input/options.json",
-                "protocol_file": "sim_input/pCa45_protocol.txt",
-                "results_file": "sim_output/results.txt",
-                "output_handler_file": "sim_input/output_handler.json"
-            }
-        ]
-    }
-}
-````
+save_image:
++ plots the image with the date as its name.
 
-The last entry in the job is optional and defines an output-handler. In this example `output_handler.json` was
+generate_folder_paths:
++ gets path to both the yearly folder and the plots_per_month folder if inexistent.
+
+creates_folder:
++ if if the paths created by generate_folder_paths don't exist, it creates them.
+
+get_path_for_results:
++ finally the results path is returned.
+
 
 ````
-{
-    "templated_images":
-    [
-        {
-            "relative_to": "this_file",
-            "template_file_string": "../template/template_summary.json",
-            "output_file_string": "../sim_output/summary.png"
-        }
-    ]
-}
+class FolderManager:
+
+    def __init__(self, app_object):
+        self.app_object = app_object
+        self.current_datetime = dt.now()
+        self.get_current_important_values()
+        self.generate_folder_paths()
+        self.create_folders()
+        self.save_image()
+
+    def get_current_important_values(self):
+        self.year = self.current_datetime.strftime("%Y")
+        self.month = self.current_datetime.strftime("%B")
+        self.week = self.current_datetime.strftime("%W")
+
+    def save_image(self):
+        if self.app_object.init_month != self.app_object.final_month:
+            self.plot_4_name = str(self.app_object.init_month) + \
+                "-" + str(self.app_object.final_month)
+        else:
+            self.plot_4_name = str(self.app_object.init_month)
+
+        self.filepath_4_plot = str(self.app_object.filepath2) + "/" + \
+            str(self.plot_4_name)+".png"
+        self.hist_4_plot = plt.savefig(self.filepath_4_plot)
+
+    def generate_folder_paths(self):
+        self.current_directory = os.path.abspath(os.path.dirname(__file__))
+
+        self.directory_per_month = os.path.join(
+            self.current_directory,
+            "results",
+            "{}_{}".format(
+                self.year,
+                "monthly_results"
+            )
+        )
+        self.directory_plots_month = os.path.join(
+            "results",
+            "2021_monthly_results",
+            "{}".format("plots_per_month")
+        )
+
+    def create_folders(self):
+        if not os.path.exists(self.directory_per_month):
+            os.makedirs(self.directory_per_month)
+
+        if not os.path.exists(self.directory_plots_month):
+            os.makedirs(self.directory_plots_month)
+
+    def get_path_for_results(self):
+        return self.directory_per_month
 ````
 
-This instructed FiberPy to:
-+ take the simulation results
-+ create a figure using the framework described in the `template_summary.json` file
-+ save the data to `../sim_output/summary.png`
+This instructed TheMiceCounter to:
++ know where to locate the results folder
++ save the data to `code/year_monthly_results/data_results.xsxl`  
++ save the plots to `code/year_monthly_results/plots_per_month`
 

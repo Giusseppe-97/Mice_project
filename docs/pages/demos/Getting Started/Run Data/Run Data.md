@@ -11,21 +11,20 @@ nav_order: 1
 ## Overview
 Before proceeding, make sure that you have followed the [installation instructions](../../../installation/installation.html). You need TheMiceCounter folder and an Anaconda distribution of Python to run this demo.
 
+After following the [Running the App](../../../installation/Running the App/Running the App.html) instructions, TheMiceCounter application would start and should look something like this:
+
+<img src="Starting App.PNG" width="100%">
+
 ## What this demo does
 
 This demo:
 
 + Explains how to use the entries at the top of the application. This includes:
-+ + Setting the input data 
-+ + Setting the output folder 
-+ + Setting the date frame 
-+ + Running the data selected. 
-+ + Using the Rest bottom. 
-
-
-After following the [Running the App](../../../installation/Running the App/Running the App.html) instructions, TheMiceCounter application would start and should look something like this:
-
-<img src="Starting App.PNG" width="100%">
+    - Setting the input data 
+    - Setting the output folder 
+    - Setting the date frame 
+    - Running the data selected. 
+    - Using the Reset bottom. 
 
 ## Instructions
 

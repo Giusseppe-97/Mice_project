@@ -17,7 +17,7 @@ After following the [Run Data](../Run Data/Run Data.html) and the [Histogram Dis
 This demo:
 
 + Locate the results
-    - <year>_monthly_results
+    - 'year'_monthly_results
         - plots_per_month
         - data_results
 
@@ -56,23 +56,17 @@ This class, labelled `FolderManager` Enables the developement and management of 
 
 The file defines the different functions needed for this class to create every specific folder and name it appropiately.
 
-__init__function:
-+ initializes the current time and the other functions of the class.
+__init__function: initializes the current time and the other functions of the class.
 
-get_current_important_values:
-+ extract the current year, month and day.
+get_current_important_values: extract the current year, month and day.
 
-save_image:
-+ plots the image with the date as its name.
+save_image: plots the image with the date as its name.
 
-generate_folder_paths:
-+ gets path to both the yearly folder and the plots_per_month folder if inexistent.
+generate_folder_paths: gets path to both the yearly folder and the plots_per_month folder if inexistent.
 
-creates_folder:
-+ if if the paths created by generate_folder_paths don't exist, it creates them.
+creates_folder: if if the paths created by generate_folder_paths don't exist, it creates them.
 
-get_path_for_results:
-+ finally the results path is returned.
+get_path_for_results: finally the results path is returned.
 
 
 ````

@@ -59,7 +59,7 @@ class Application(tk.Tk):
         # Create Calendar
         self.cal = tkc(
             self.mainFrame1, selectbackground="#120597", background="#120597",
-            selectmode="day", year=2021, month=5, day=1
+            selectmode="day", year=2021, month=1, day=1
         )
 
         # Call methods
@@ -157,7 +157,7 @@ class Application(tk.Tk):
 
         self.label3.place(x=20, y=70, height=40, width=80)
         self.label4.place(x=20, y=140, height=40, width=80)
-        self.label5.place(x=1300, y=30, height=30)
+        self.label5.place(x=1250, y=30, height=30)
         self.label6.place(x=1250, y=80, height=30)
         self.label7.place(x=1250, y=150, height=30)
 
@@ -173,7 +173,6 @@ class Application(tk.Tk):
         self.button5.place(x=1450, y=70, height=40)
         self.button4.place(x=1450, y=140, height=40)
         self.button_quit.pack(side=tk.BOTTOM, pady=10)
-        # quit button not placed yet, just packed
         self.cal.place(x=1550, y=30, rely=0.005, relx=0.02, height=210, width=300)
 
         self.canvas01.place(x=100, y=40, height=600, width=800)
@@ -229,22 +228,6 @@ class Application(tk.Tk):
         n_df = self.df[(self.init_date <= self.df.Date_of_birth) &
                        (self.df.Date_of_birth <= self.final_date)]
 
-        # print(n_df)
-
-        # Failed attempt to make the code underneath better
-
-        # lage = []
-        # for index, row in n_df.iterrows():
-        #     a1 = str(self.final_date)
-        #     aa = dt.strptime(a1, "%Y-%m-%d")
-        #     b1 = str(n_df['Date_of_birth'])
-        #     b1 = b1[5:15]
-        #     print(b1)
-        #     bb = dt.strptime(b1, "%Y-%m-%d")
-        #     bd = abs((bb - aa).days)
-        #     age_in_weeks = bd//7
-        #     lage.append(age_in_weeks)
-        # print(lage)
 
         # List of ages of the different type of mice 
         birth_MWt = []
@@ -253,13 +236,9 @@ class Application(tk.Tk):
         birth_FHet = []
 
 # ***
-# My BEST idea so far is to reorganize this code. If I calculate the birthday of all of the dataframe
+# Need to optimize and reorganize this part of the code. If I calculate the birthday of all of the dataframe
 # I can then just grab the dataframe of 'sex', 'Genotype' and 'status' and they will have the birthdays already
 # ***
-
-# Needs optimization. Too many lines for a simple part of the code
-# There are 4 loops that are doing the same thing for example. There should be a way to reduce this
-        # Selects data from the excel file for sex, genotype and status (only mice that are alive)
         df_MWt = pd.DataFrame(n_df.loc[(self.df['Sex'] == 'Male') & (
             n_df['Genotype'] == 'Null(-)') & (n_df['Status'] == 'Alive')])
 
@@ -381,14 +360,6 @@ class Application(tk.Tk):
 
         axs[1, 1].hist(self.d2[3], bins=self.listy, color=self.colors[3],
                        label='Female R403Q(+/-)', edgecolor='white')
-
-    # Unverified but presumably better way to write the lines underneath
-        # for i in range(1):
-        #     for j in range(1):
-        #         axs[i, j].xaxis.set_major_locator(MaxNLocator(integer=True))
-        # for i in range(1):
-        #     for j in range(1):
-        #         axs[i, j].yaxis.set_major_locator(MaxNLocator(integer=True))
 
         axs[0, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
         axs[0, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -567,5 +538,5 @@ if __name__ == "__main__":
     app = Application()
     app.geometry("1900x990+0+0")
     app.resizable(True, False)
-    # app.iconbitmap(r'../docs/_site/mice_icon.ico')
+    app.iconbitmap(r'../docs/favicon.ico')
     app.mainloop()

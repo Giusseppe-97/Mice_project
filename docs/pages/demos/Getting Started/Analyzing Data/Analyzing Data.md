@@ -27,7 +27,10 @@ This demo:
 
 As mentioned before, all of the results obtained from running the application are written in the result folder located in `<repo>/code/results`. 
 
-A subfolder named `<(year)_monthly_results>` has all of the information of a lattice Ran that specific year. In case there are experiments longer than a year, a new subfolder would be created automatically. In this case, it has the data of a mice lattice this year (2021).
+A subfolder named `<(year)_monthly_results>` (as shown below) has all of the information of a lattice Ran that specific year. In case there are experiments longer than a year, a new subfolder would be created automatically. In this case, it has the data of a mice lattice this year (2021).
+
+<img src='year_monthly_results.png' width="50%">
+
 This folder contains the different files specific of the mice lattice the user is looking into. It is divided into two parts:
 
 + The excel workbook, always saved as `<data_results>`. 
@@ -38,13 +41,18 @@ Both the excel workbook and the plots_per_month folder carry information the use
 
 ### Understanding the results
 
-The file `plots_per_month.png` shows:
+The file `plots_per_month.png` and `data_results.png` are shown like this:
 
-<img src='plots_per_month.png'>
+<img src='plots_per_month.png' width="50%">
 
-The file `data_results.png` shows:
+In here, one file has the data of the mice and the other stores the plots from the application as a png file. 
 
-<img src='data_results.png' width="50%">
+The excel file that is created has the data of the mice and a plot of the corresponding period of time. Each sheet has a different date
+of the final day wanted to be ploted.
+
+For instance, results for the month of May look something like this:
+
+<img src='excel_for_may.png' width="50%">
 
 ## How this worked
 

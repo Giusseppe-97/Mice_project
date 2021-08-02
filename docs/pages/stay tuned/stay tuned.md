@@ -1,8 +1,7 @@
 ---
-title: Stay tuned
-parent: Demos
+title: stay tuned
 has_children: False
-nav_order: 2
+nav_order: 5
 ---
 
 # Histogram Display Preview 

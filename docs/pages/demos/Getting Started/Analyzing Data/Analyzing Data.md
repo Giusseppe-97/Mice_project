@@ -29,7 +29,7 @@ As mentioned before, all of the results obtained from running the application ar
 
 A subfolder named `<(year)_monthly_results>` (as shown below) has all of the information of a lattice Ran that specific year. In case there are experiments longer than a year, a new subfolder would be created automatically. In this case, it has the data of a mice lattice this year (2021).
 
-<img src='year_monthly_results.png' width="50%">
+<img src='year_monthly_results.PNG' width="30%">
 
 This folder contains the different files specific of the mice lattice the user is looking into. It is divided into two parts:
 
@@ -43,7 +43,7 @@ Both the excel workbook and the plots_per_month folder carry information the use
 
 The file `plots_per_month.PNG` and `data_results.png` are shown like this:
 
-<img src='plots_per_month.PNG' width="50%">
+<img src='plots_per_month.PNG' width="30%">
 
 In here, one file has the data of the mice and the other stores the plots from the application as a png file. 
 
@@ -52,7 +52,7 @@ of the final day wanted to be ploted.
 
 For instance, results for the month of May look something like this:
 
-<img src='excel_for_may.PNG' width="50%">
+<img src='excel_for_may.PNG' width="100%">
 
 ## How this worked
 

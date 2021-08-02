@@ -567,5 +567,5 @@ if __name__ == "__main__":
     app = Application()
     app.geometry("1900x990+0+0")
     app.resizable(True, False)
-    app.iconbitmap(r'../docs/_site/favicon.ico')
+    # app.iconbitmap(r'../docs/_site/mice_icon.ico')
     app.mainloop()

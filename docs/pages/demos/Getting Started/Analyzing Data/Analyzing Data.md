@@ -41,9 +41,9 @@ Both the excel workbook and the plots_per_month folder carry information the use
 
 ### Understanding the results
 
-The file `plots_per_month.png` and `data_results.png` are shown like this:
+The file `plots_per_month.PNG` and `data_results.png` are shown like this:
 
-<img src='plots_per_month.png' width="50%">
+<img src='plots_per_month.PNG' width="50%">
 
 In here, one file has the data of the mice and the other stores the plots from the application as a png file. 
 
@@ -52,7 +52,7 @@ of the final day wanted to be ploted.
 
 For instance, results for the month of May look something like this:
 
-<img src='excel_for_may.png' width="50%">
+<img src='excel_for_may.PNG' width="50%">
 
 ## How this worked
 

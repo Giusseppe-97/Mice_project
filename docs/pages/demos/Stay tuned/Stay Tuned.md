@@ -1,6 +1,6 @@
 ---
 title: Stay Tuned
-parent: demos
+parent: Demos
 has_children: False
 nav_order: 2
 ---
@@ -17,7 +17,7 @@ For instance, this application should have its own exe file that doesn't depend 
 On the other hand, it is intended for the app to be able to extract data from bigger database platforms such as RedCap. This would allow researchers to rapidly get a visualization of the data they have recorded.
 
 
-<img src="Stay_Tuned.png" width="85%"> 
+<img src="Stay_Tuned.png" width="90%"> 
 
 
 We will add new tabs describing the new features as they get accomplished.

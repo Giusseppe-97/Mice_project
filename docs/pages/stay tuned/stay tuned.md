@@ -1,5 +1,5 @@
 ---
-title: stay tuned
+title: Stay tuned
 has_children: False
 nav_order: 5
 ---

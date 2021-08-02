@@ -14,7 +14,7 @@ TheMiceCounter is an application for managing mice litter's data. The app allows
 
 Ideally, the application should work on any computer that has Excel. The result are shown in the following image:
 
-<img src="img/The_mice_counter_xlsx_result.PNG" width="100%">
+<img src="img/The_mice_counter_xlsx_result.png" width="100%">
 
 ## Organization
 
